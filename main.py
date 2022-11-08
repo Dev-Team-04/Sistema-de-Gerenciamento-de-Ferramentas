@@ -8,28 +8,32 @@ from tkinter import ttk, messagebox
 nome_adm = 'devteam4'
 senha_adm = 'devteam4'
 
+tabela_ferramentas = pd.read_csv(r'lista_ferramentas.csv', sep=';', index_col=0, encoding= 'unicode_escape')
+tabela_funcionarios = pd.read_csv(r'lista_funcionarios.csv', sep=',', index_col=0)
+tabela_reservas = pd.read_csv(r'lista_reservas.csv', sep=';', index_col=0)
+
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
 
         self.title('Tela de Login')
-        self.geometry('1000x700')
+        self.geometry('936x700')
         self.config(background='#008')
         self.bg = PhotoImage(file="TELA BEM VINDO 3.png")
         self.label = Label(self, image=self.bg, width=1000, height=700, bg='silver')
         self.label.place(x=0, y=0)
 
-        self.lb_usuario = Label(self, text="LOGIN:", anchor=W, bg='silver')
+        self.lb_usuario = Label(self, text="LOGIN:", anchor=W, bg='white')
         self.lb_usuario.place(x=150, y=190, width=100, height=20)
-        self.usuario = Entry(self, bg='silver')
+        self.usuario = Entry(self, bg='white')
         self.usuario.place(x=150, y=220, width=100, height=20)
 
-        self.lb_senha = Label(self, text="PASSWORD:", anchor=W, bg='silver')
+        self.lb_senha = Label(self, text="PASSWORD:", anchor=W, bg='white')
         self.lb_senha.place(x=150, y=250, width=100, height=20)
-        self.senha = Entry(self, bg='silver')
+        self.senha = Entry(self, bg='white')
         self.senha.place(x=150, y=280, width=100, height=20)
 
-        self.botao3 = Button(self, text="Login", bg='silver', anchor=W, command=self.abrir_jan_cf)
+        self.botao3 = Button(self, text="Login", bg='white', anchor=W, command=self.abrir_jan_cf)
         self.botao3.place(x=150, y=350, width=100, height=20)
 
         #self.usuario = Entry(self, bg='silver')
@@ -56,12 +60,153 @@ class Jan_Cf(tk.Toplevel):
     def __init__(self):
         super().__init__()
 
+
         self.title('Gerenciador de Ferramentas')
-        self.geometry('900x600')
+        #self.geometry('2000x1080') # Apos inserir ZOOMED isso aqui não serve mais.
+        self.state("zoomed")
 
         my_note = ttk.Notebook(self)
         my_note.place(x=0, y=0, width=1000, height=600)
 
+
+#------ FUNÇÃO --- DELETAR----SOMENTE --- TB4 -------- FUNCIONARIOS
+
+        def del_tvbd():
+            if not treeProdutos.selection():
+                messagebox.showinfo(title='erro', message='Selecione o elemento a ser deletado')
+            else:
+                index = treeProdutos.index(treeProdutos.selection()[0])
+                treeProdutos.delete(treeProdutos.selection()[0])
+                # print(tabela_funcionarios)
+                tabela_funcionarios = pd.read_csv(r'lista_funcionarios.csv', sep=',', index_col=0)
+                tabela_funcionarios = tabela_funcionarios.drop([index])
+                tabela_funcionarios = tabela_funcionarios.reset_index()
+                # print(tabela_funcionarios)
+                tabela_funcionarios = tabela_funcionarios.drop(['index'], axis=1)
+                tabela_funcionarios.to_csv(r'lista_funcionarios.csv')
+
+# ----------FUNÇÃO --- DE --- VALIDAÇÃO --- DE --- CPF ---- SOMENTE --- TB4 ---- FUNCIONARIOS
+
+        def cpf_validate():
+            entrada = vcpf.get()
+            #  Obtém os números do CPF e ignora outros caracteres
+            cpf = [int(char) for char in entrada if char.isdigit()]
+
+            #  Verifica se o CPF tem 11 dígitos
+            # if len(cpf) != 11:
+            #     return False, 'CPF invalido'
+
+            #  Verifica se o CPF tem todos os números iguais, ex: 111.111.111-11
+            #  Esses CPFs são considerados inválidos mas passam na validação dos dígitos
+            #  Antigo código para referência: if all(cpf[i] == cpf[i+1] for i in range (0, len(cpf)-1))
+            if cpf == cpf[::-1]:
+                return False, 'CPF invalido'
+
+                #  Valida os dois dígitos verificadores
+            for i in range(9, 11):
+                value = sum((cpf[num] * ((i + 1) - num) for num in range(0, i)))
+                digit = ((value * 10) % 11) % 10
+                if digit != cpf[i]:
+                    return False, 'Digito verificador invalido'
+            entrada = entrada.replace(" ", "")
+            entrada = entrada.replace("-", "")
+            entrada = entrada.replace("-", "")
+            entrada = entrada.replace("/", "")
+            entrada = entrada.replace(".", "")
+            return entrada
+
+        def validation():
+            name = vnome.get()
+            turno = vturno.get()
+            equipe = vequipe.get()
+            cpf = cpf_validate()
+            print(cpf)
+            fone = vfone.get()
+            radio = vradio.get()
+            msg = ''
+
+            if len(name) == 0:
+                return 'Nome não pode estar vazio'
+            if len(turno) == 0:
+                return 'Turno vazio'
+            if len(equipe) == 0:
+                return 'equipe vazio'
+            if cpf == (False, 'Digito verificador invalido'):
+                return 'Digito verificador do CPF invalido'
+            if cpf == (False, 'CPF invalido'):
+                return 'CPF invalido'
+            if len(cpf) == 0:
+                return 'cpf vazio'
+            if len(fone) == 0 and len(radio) == 0:
+                return 'Celular e radios vazios'
+            else:
+                try:
+                    if any(ch.isdigit() for ch in name):
+                        return 'Nome nao pode conter numeros'
+                    if any(ch.isdigit() for ch in turno):
+                        return 'Turno nao pode conter numeros'
+                    # if any(ch is not int for ch in cpf):
+                    #     return 'CPF nao pode conter letras'
+                    # if any(ch.isdigit() for ch in fone):
+                    #     return 'Fone nao pode conter letras'
+                    elif len(
+                            name) <= 5:  # elif len(name) <= 5 or len(name) >40: return 'O nome deve ser entre 05 a 40 caracteres'
+                        return 'Nome é muito curto. O nome deve ser entre 05 a 40 caracteres'
+                    elif len(name) > 40:
+                        return 'Nome é muito longo. O nome deve ser entre 05 a 40 caracteres'
+                    elif len(turno) <= 4:  # Podem ser as opções para escolher uma (manha, tarde, noite)
+                        return 'Turno deve ser manha, tarde ou noite'
+                    elif len(turno) > 5:
+                        return 'Turno deve ser manha, tarde ou noite'
+                    elif len(equipe) <= 1:
+                        return 'Equipe é muito curto. A equipe deve ser entre 02 a 30 caracteres'
+                    elif len(equipe) > 30:
+                        return 'Equipe é muito longo. Equipe deve ser entre 02 a 30 caracteres'
+                    elif len(cpf) != 11:
+                        return 'CPF deve conter 11 caracteres. Sem traço nem ponto nem barras'
+                    # TEM QUE INSERIR AQUI A FUNÇÃO DE VALIDAR DIGITOS VERIFICADORES DO CPF
+                    elif len(radio) == 0 and len(fone) != 9:
+                        return 'Fone deve conter 9 caracteres. Sem traço nem ponto nem barras'
+                    elif len(fone) == 0 and (len(radio) != 0 and len(radio) > 8):
+                        return 'Radio deve conter até 8 caracteres. Sem traço nem ponto nem barras'
+                    else:
+                        return 'Sucess!'
+                except Exception as ep:
+                    messagebox.showerror('Error', ep)
+            # messagebox.showinfo('message', msg)
+
+# ----------FUNÇÃO --- DOWNLOAD ---- SOMENTE --- TB4 ---- FUNCIONARIOS
+
+        def download():
+            tabela_funcionarios.to_excel(r'C:\Users\Public\Downloads\tabela_tecnicos.xlsx')
+            messagebox.showinfo(
+                message='Download realizado com sucesso. Documento salvo em ' + r'C:\Users\Public\Downloads')
+
+#----------FUNÇÃO --- ADICIONAR ---- SOMENTE --- TB4 ---- FUNCIONARIOS
+
+        def add_tvbd():
+            if validation() != 'Sucess!':
+                # or vturno.get() =='' or vequipe.get() =='' or vcpf.get() =='' or vfone.get() =='':
+                messagebox.showinfo('erro', message=validation())
+            else:
+                treeProdutos.insert('', tk.END,
+                                    values=(
+                                    vnome.get(), vturno.get(), vequipe.get(), vcpf.get(), vfone.get(), vradio.get()))
+                lista_add = [vnome.get(), vturno.get(), vequipe.get(), vcpf.get(), str(vfone.get()),
+                             str(vradio.get())]
+                # print(tabela_funcionarios)
+                tabela_funcionarios.loc[len(tabela_funcionarios)] = lista_add
+                # print(tabela_funcionarios)
+                tabela_funcionarios.to_csv(r'lista_funcionarios.csv')
+                vnome.delete(0, END),
+                vturno.delete(0, END),
+                vequipe.delete(0, END),
+                vcpf.delete(0, END),
+                vfone.delete(0, END),
+                vradio.delete(0, END),
+                vnome.focus()
+
+#-------------------------------------------------------------------------------------------------------#
 
         tb2 = Frame(my_note, background='#008', width=250, height=150, bg='silver')
         my_note.add(tb2, text='Gerenciar Ferramentas')
@@ -75,8 +220,10 @@ class Jan_Cf(tk.Toplevel):
         tb5 = Frame(my_note, bg='silver', width=250, height=150)
         my_note.add(tb5, text='Gerenciar Reservas')
 
-# ------------------Adicionando Widgets a aba Gerenciar Tecnicos (botes, labels, etc)--------------------
+# ------------------TB4 --- GERENCIAR --- TECNICOS--------------------
 
+        lbradio_tb4 = Label(tb4, text='RADIO', anchor=W)
+        vradio = Entry(tb4)
         lbnome_tb4 = Label(tb4, text='NOME', anchor=W)
         vnome = Entry(tb4)
         lbturno_tb4 = Label(tb4, text='TURNO', anchor=W)
@@ -128,36 +275,38 @@ class Jan_Cf(tk.Toplevel):
 
         # -Botao para executar a funcao de adicionar dados ao treeview e ao BD pelo formulario--------------------------
 
-        btn_adicionar_tb4 = Button(tb4, text='Adicionar')
-        #                           command=add_tvbd)
+        btn_adicionar_tb4 = Button(tb4, text='Adicionar', command=add_tvbd)
 
         btn_adicionar_tb2 = Button(tb2, text='Adicionar')# command=add_tvbd2)
+
+        btn_adicionar_tb5 = Button(tb5, text='Reservar')
 
         # -----------------------------------------------------------------------------------
 
         # -Botao para executar a funcao de Excluir dados do treeview e do BD selecionando o item-----------------------
 
-        btn_excluir_tb4 = Button(tb4, text='Deletar')
-        #                         command=del_tvbd)
+        btn_excluir_tb4 = Button(tb4, text='Deletar', command=del_tvbd)
 
         btn_excluir_tb2 = Button(tb2, text='Deletar') #command=del_tvbd2)
 
         # --------------------------Download --------------------------------------------------
 
-        btn_down_tb4 = Button(tb4, text='Fazer download') #command=download)
+        btn_down_tb4 = Button(tb4, text='Download', command=download)
 
-        btn_down_tb2 = Button(tb2, text='Fazer download') #command=download2)
+        btn_down_tb2 = Button(tb2, text='Download') #command=download2)
 
-        ##-----------Adicionando o treeview na aba4 e carregando dados do bd-------------------------
+        btn_down_tb5 = Button(tb5, text='Download')
+
+        #--------------------------------DEVOLUÇÃO
+
+        btn_devol_tb5 = Button(tb5, text='Devolução')
+
+        ##-----------Adicionando o treeview na aba4 e carregando dados-------------------------
 
 
         #dadosColunas = [item for item in Bd.tabela_funcionarios.columns]
 
-        colunas = ['NOME', 'TURNO', 'EQUIPE', 'CPF','TELEFONE']
-        valores = ['NELSON', 'NOTURNO', 'DEV4', 4]
-
-        dadosColunas = [item for item in colunas]
-
+        colunas = [item for item in tabela_funcionarios.columns]
 
         style = ttk.Style()
         style.theme_use('default')
@@ -166,7 +315,7 @@ class Jan_Cf(tk.Toplevel):
         style.map('Treeview', background=[('selected', 'red')])
 
         treeProdutos = ttk.Treeview(tb4,
-                                    columns=dadosColunas,
+                                    columns=colunas,
                                     show='headings')
 
         # Adding a scrollbar to Treeview widget
@@ -181,15 +330,72 @@ class Jan_Cf(tk.Toplevel):
         xtreeScroll2.pack(side=BOTTOM, fill='x')
         ytreeScroll2.pack(side=RIGHT, fill=BOTH)
 
-        for i in dadosColunas:
+        for i in colunas:
             treeProdutos.heading(f"{i}", text=f"{i}")
 
-        #for n in Bd.tabela_funcionarios.values:
-        treeProdutos.insert('', tk.END, values=valores)
+        for n in tabela_funcionarios.values:
+            treeProdutos.insert('', tk.END, values=list(n))
 
         treeProdutos.place(x=4, y=100, width=1000, height=200)
 
+        # -----------Treeview da aba de ferramentas --------------
+
+        dadosColunas2 = [item2 for item2 in tabela_ferramentas.columns]
+
+        treeFer = ttk.Treeview(tb2, columns=dadosColunas2, show='headings')
+
+        # Adding a scrollbar to Treeview widget
+        ytreeScroll = ttk.Scrollbar(tb2)
+        ytreeScroll.configure(command=treeFer.yview)
+
+        xtreeScroll = ttk.Scrollbar(tb2, orient='horizontal')
+        xtreeScroll.configure(command=treeFer.xview)
+
+        treeFer.configure(yscrollcommand=ytreeScroll.set, xscrollcommand=xtreeScroll.set)
+
+        xtreeScroll.pack(side=BOTTOM, fill='x')
+        ytreeScroll.pack(side=RIGHT, fill=BOTH)
+
+        for i2 in dadosColunas2:
+            treeFer.heading(f"{i2}", text=f"{i2}")
+
+        for n2 in tabela_ferramentas.values:
+            treeFer.insert('', tk.END, values=list(n2))
+
+        treeFer.place(x=4, y=100, width=1000, height=200)
+
+        # ----------------------------------------------------------
+
+        # -----------Treeview da aba de Reservas --------------
+
+        dadosColunas3 = [item3 for item3 in tabela_reservas.columns]
+
+        treeRes = ttk.Treeview(tb5, columns=dadosColunas3, show='headings')
+
+        # Adding a scrollbar to Treeview widget
+        ytreeScroll = ttk.Scrollbar(tb5)
+        ytreeScroll.configure(command=treeRes.yview)
+
+        xtreeScroll = ttk.Scrollbar(tb5, orient='horizontal')
+        xtreeScroll.configure(command=treeRes.xview)
+
+        treeRes.configure(yscrollcommand=ytreeScroll.set, xscrollcommand=xtreeScroll.set)
+
+        xtreeScroll.pack(side=BOTTOM, fill='x')
+        ytreeScroll.pack(side=RIGHT, fill=BOTH)
+
+        for i3 in dadosColunas3:
+            treeRes.heading(f"{i3}", text=f"{i3}")
+
+        for n3 in tabela_reservas.values:
+            treeRes.insert('', tk.END, values=list(n3))
+
+        treeRes.place(x=4, y=100, width=1000, height=200)
+
+        # ---------------------------------------------------------
+
  # -------------------Posicionando os elementos na aba tb2----------------------
+
 
         lbid_tb2.place(x=10, y=10, width=80, height=20)
         vid.place(x=10, y=30, width=80, height=20)
@@ -211,9 +417,9 @@ class Jan_Cf(tk.Toplevel):
         vpn.place(x=670, y=30, width=70, height=20)
         btn_adicionar_tb2.place(x=10, y=300, width=80, height=20)
         btn_excluir_tb2.place(x=100, y=300, width=80, height=20)
-        btn_down_tb2.place(x=190, y=300, width=100, height=20)
+        btn_down_tb2.place(x=190, y=300, width=80, height=20)
 
-# -------------------Posicionando os elementos na aba tb4----------------------
+# -------------------LABEL E ENTRY DA ABA TECNICOS TB4----------------------
 
         lbnome_tb4.place(x=10, y=10, width=80, height=20)
         vnome.place(x=10, y=30, width=80, height=20)
@@ -224,14 +430,19 @@ class Jan_Cf(tk.Toplevel):
         lbcpf_tb4.place(x=270, y=10, width=70, height=20)
         vcpf.place(x=270, y=30, width=70, height=20)
         lbfone_tb4.place(x=360, y=10, width=80, height=20)
+        lbradio_tb4.place(x=450, y=10, width=80, height=20)
+        vradio.place(x=450, y=30, width=80, height=20)
         vfone.place(x=360, y=30, width=80, height=20)
         btn_adicionar_tb4.place(x=10, y=300, width=80, height=20)
         btn_excluir_tb4.place(x=100, y=300, width=80, height=20)
         #btn_carregar_tb4.place(x=190, y=300, width=80, height=20)
-        btn_down_tb4.place(x=190, y=300, width=100, height=20)
+        btn_down_tb4.place(x=190, y=300, width=80, height=20)
 
 # -------------------Posicionando os elementos na aba tb5 GERENCIADOR DE RESERVAS----------------------
 
+        btn_devol_tb5.place(x=100, y=300, width=80, height=20)
+        btn_adicionar_tb5.place(x=10, y=300, width=80, height=20)
+        btn_down_tb5.place(x=190, y=300, width=80, height=20)
         lbidfer_tb5.place(x=10, y=10, width=80, height=20)
         vidfer.place(x=10, y=30, width=80, height=20)
         lbdesc_tb5.place(x=100, y=10, width=80, height=20)
