@@ -2,6 +2,7 @@ import pandas as pd
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk, messagebox
+from random import randint
 
 #-----------
 
@@ -84,6 +85,118 @@ class Jan_Cf(tk.Toplevel):
                 # print(tabela_funcionarios)
                 tabela_funcionarios = tabela_funcionarios.drop(['index'], axis=1)
                 tabela_funcionarios.to_csv(r'lista_funcionarios.csv')
+
+# ------ FUNÇÃO --- DELETAR----SOMENTE --- TB2 -------- FUNCIONARIOS
+
+        def del_tvbd2():
+            if not treeFer.selection():
+                messagebox.showinfo(title='erro', message='Selecione o elemento a ser deletado')
+            else:
+                index = treeFer.index(treeFer.selection()[0])
+                #print(index)
+                treeFer.delete(treeFer.selection()[0])
+                tabela_ferramentas = pd.read_csv(r'lista_ferramentas.csv', sep=';', index_col=0)
+                #print(tabela_ferramentas)
+                tabela_ferramentas = tabela_ferramentas.drop([index])
+                tabela_ferramentas = tabela_ferramentas.reset_index()
+                # print(tabela_ferramentas)
+                tabela_ferramentas = tabela_ferramentas.drop(['index'], axis=1)
+                # print(tabela_ferramentas)
+                tabela_ferramentas.to_csv(r'lista_ferramentas.csv', sep=';')
+
+        def val_fer():
+            descricao = vdesc.get()
+            fabricante = vfab.get()
+            voltagem = vvolt.get()
+            pnumber = vpn.get()
+            tamanho = vtam.get()
+            unidade = vuni.get()
+            tipofer = vtipo.get()
+            matfer = vmat.get()
+            if len(descricao) == 0:
+                return 'descricao não pode estar vazio'
+            if len(fabricante) == 0:
+                return 'fabricante não pode estar vazio'
+            if len(voltagem) == 0:
+                return 'voltagem não pode estar vazio'
+            if len(pnumber) == 0:
+                return 'descricao não pode estar vazio'
+            if len(tamanho) == 0:
+                return 'fabricante não pode estar vazio'
+            if len(unidade) == 0:
+                return 'voltagem não pode estar vazio'
+            if len(tipofer) == 0:
+                return 'descricao não pode estar vazio'
+            if len(matfer) == 0:
+                return 'fabricante não pode estar vazio'
+            else:
+                try:
+                    if len(descricao) > 60: # elif len(name) <= 5 or len(name) >40: return 'O nome deve ser entre 05 a 40 caracteres'
+                        return 'descricao deve ter até 60'
+                    if len(fabricante) > 30:
+                        return 'fabricante deve ter até 40 caracteres'
+                    if len(voltagem) > 15: # Podem ser as opções para escolher uma (manha, tarde, noite)
+                        return 'voltagem deve ter até 15 caracteres'
+                    if len(pnumber) > 25:
+                        return 'pnumber deve ter até 25 caracteres'
+                    if len(tamanho) > 20:
+                        return 'tamanho deve ter até 20 caracteres'
+                    if len(unidade) > 15:
+                        return 'Unidade de medida deve ter até 15 caracteres'
+                    if len(tipofer) >15:
+                        return 'tipofer deve ter até 15 caracteres'
+                    # TEM QUE INSERIR AQUI A FUNÇÃO DE VALIDAR DIGITOS VERIFICADORES DO CPF
+                    if len(matfer) >15 :
+                        return 'matfer deve ter até 15 caracteres'
+                    else:
+                        return 'Sucess!'
+                except Exception as ep:
+                    messagebox.showerror('Error', ep)
+
+        def add_tvbd2():
+            if val_fer() != 'Sucess!':
+                #or vturno.get() =='' or vequipe.get() =='' or vcpf.get() =='' or vfone.get() =='':
+                messagebox.showinfo('erro', message=val_fer())
+            # if vdesc.get() =='' or vfab.get() =='' or vvolt.get() =='' \
+            #         or vtam.get() =='' or vuni.get() =='' or vtipo.get() =='' or vmat.get() ==''\
+            #         or vpn.get() =='':
+            #     messagebox.showinfo('erro', message='Preencha todos os campos')
+            else:
+                treeFer.insert('', tk.END,
+                values=(gerar_id(), vdesc.get(), vfab.get(), vvolt.get(), vtam.get(), vuni.get(),
+                vtipo.get(),vmat.get(),vpn.get()))
+                lista_add = [gerar_id(), vdesc.get(), vfab.get(), vvolt.get(), vtam.get(), vuni.get(),
+                vtipo.get(),vmat.get(),vpn.get()]
+                #print(Bd.tabela_ferramentas)
+                tabela_ferramentas.loc[len(tabela_ferramentas)] = lista_add
+                #print(Bd.tabela_ferramentas)
+                tabela_ferramentas.to_csv(r'lista_ferramentas.csv', sep=';')
+                #vid.delete(0, END),
+                vdesc.delete(0, END),
+                vfab.delete(0, END),
+                vvolt.delete(0, END),
+                vtam.delete(0, END),
+                vuni.delete(0, END),
+                vtipo.delete(0, END),
+                vmat.delete(0, END),
+                vpn.delete(0, END),
+                vnome.focus()
+
+        def gerar_id():
+            bd_fer = pd.read_csv(r'lista_ferramentas.csv', sep=';', index_col=0)
+            lista_ids_existentes = bd_fer['id']
+            id = randint(1, 100000)
+            while id in lista_ids_existentes:
+                id = randint(1, 100000)
+            else:
+                return id
+#-----------------------------------------------------------------------
+
+# ----------FUNÇÃO --- DOWNLOAD ---- SOMENTE --- TB4 ---- FUNCIONARIOS
+
+        def download2():
+            tabela_ferramentas.to_excel(r'C:\Users\Public\Downloads\tabela_ferramentas.xlsx')
+            messagebox.showinfo(message='Download realizado com sucesso. Documento salvo em ' + r'C:\Users\Public\Downloads')
 
 # ----------FUNÇÃO --- DE --- VALIDAÇÃO --- DE --- CPF ---- SOMENTE --- TB4 ---- FUNCIONARIOS
 
@@ -175,6 +288,8 @@ class Jan_Cf(tk.Toplevel):
                     messagebox.showerror('Error', ep)
             # messagebox.showinfo('message', msg)
 
+
+
 # ----------FUNÇÃO --- DOWNLOAD ---- SOMENTE --- TB4 ---- FUNCIONARIOS
 
         def download():
@@ -206,7 +321,103 @@ class Jan_Cf(tk.Toplevel):
                 vradio.delete(0, END),
                 vnome.focus()
 
-#-------------------------------------------------------------------------------------------------------#
+
+
+# ----------------------------------RESERVAR TB5-----------------------------------------#
+
+        def reservar():
+            lista_idfer = tabela_ferramentas['id'].tolist()
+            lista_idres = tabela_reservas['Id ferramenta'].tolist()
+            if int(vidfer.get()) not in lista_idfer:
+                messagebox.showinfo('erro', message='Id da ferramenta não localizado. Consulte a tabela'
+                                                    'de ferramentas para verificação')
+            else:
+                if int(vidfer.get()) in lista_idres:
+                    messagebox.showinfo('erro',
+                                        message='Ferramenta já reservada. Consulte a tabela de reservas para maiores informações')
+                else:
+                    treeRes.insert('', tk.END,
+                                   values=(gerar_idres(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(),vdtdev.get(),vhrdev.get(), vnmtec.get(), 'PENDENTE'))
+                    lista_add = [gerar_idres(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(), vdtdev.get(),
+                                 vhrdev.get(), vnmtec.get(), 'PENDENTE']
+                    # print(tabela_ferramentas)
+                    tabela_reservas.loc[len(tabela_reservas)] = lista_add
+                    print(tabela_reservas)
+                    tabela_reservas.to_csv(r'lista_reservas.csv', sep=';')
+                    vidfer.delete(0, END),
+                    vdescres.delete(0, END),
+                    vdtret.delete(0, END),
+                    vhrret.delete(0, END),
+                    vdtdev.delete(0, END),
+                    vhrdev.delete(0, END),
+                    vnmtec.delete(0, END),
+                    vidfer.focus()
+
+        def gerar_idres():
+            lista_ids_existentes = tabela_reservas['Id ferramenta'].tolist()
+            id = randint(1, 100000)
+            while id in lista_ids_existentes:
+                id = randint(1, 100000)
+            else:
+                return id
+
+# ----------------------------------DEVOLUÇÃO TB5-----------------------------------------#
+        def devolucao():
+            if not treeRes.selection():
+                messagebox.showinfo(title='erro', message='Selecione o elemento a ser atualizado')
+            else:
+                index = treeRes.index(treeRes.selection()[0])
+                # print(index)
+
+                # Grab the record number
+                selected = treeRes.focus()
+                # Grab record values
+                values = treeRes.item(selected, 'values')
+                # (selected)
+                # print(treeRes.item(selected)['values'][8])
+
+                # outpus to entry boxes
+                vidres.insert(0, values[0])
+                vidfer.insert(0, values[1])
+                vdescres.insert(0, values[2])
+                vdtret.insert(0, values[3])
+                vhrret.insert(0, values[4])
+                vdtdev.insert(0, values[5])
+                vhrdev.insert(0, values[6])
+                vnmtec.insert(0, values[7])
+                vstatus.insert(0, values[8])
+
+                # Update record
+                treeRes.item(selected, text="", values=(
+                vidres.get(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(), vdtdev.get(),
+                vhrdev.get(), vnmtec.get(), 'finalizado'))
+                lista_add = [vidres.get(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(), vdtdev.get(),
+                             vhrdev.get(), vnmtec.get(), 'finalizado']
+                tabela_reservas = pd.read_csv('lista_reservas.csv', sep=';', index_col=0)
+                tabela_reservas = tabela_reservas.drop([index])
+                tabela_reservas = tabela_reservas.reset_index()
+                tabela_reservas = tabela_reservas.drop(['index'], axis=1)
+                # print(tabela_ferramentas)
+                tabela_reservas.loc[len(tabela_reservas)] = lista_add
+                print(tabela_reservas)
+                tabela_reservas.to_csv(r'lista_reservas.csv', sep=';')
+                vidfer.delete(0, END),
+                vdescres.delete(0, END),
+                vdtret.delete(0, END),
+                vhrret.delete(0, END),
+                vdtdev.delete(0, END),
+                vhrdev.delete(0, END),
+                vnmtec.delete(0, END),
+                vidfer.focus()
+
+# ----------FUNÇÃO --- DOWNLOAD ---- SOMENTE --- TB4 ---- FUNCIONARIOS
+
+        def download3():
+            tabela_reservas.to_excel(r'C:\Users\Public\Downloads\lista_reservas.xlsx')
+            messagebox.showinfo(message='Download realizado com sucesso. Documento salvo em ' + r'C:\Users\Public\Downloads')
+
+
+# -------------------------------------------------------------------------------------------------------#
 
         tb2 = Frame(my_note, background='#008', width=250, height=150, bg='silver')
         my_note.add(tb2, text='Gerenciar Ferramentas')
@@ -220,7 +431,7 @@ class Jan_Cf(tk.Toplevel):
         tb5 = Frame(my_note, bg='silver', width=250, height=150)
         my_note.add(tb5, text='Gerenciar Reservas')
 
-# ------------------TB4 --- GERENCIAR --- TECNICOS--------------------
+# ------------------TB4 GERENCIAR TECNICOS--------------------
 
         lbradio_tb4 = Label(tb4, text='RADIO', anchor=W)
         vradio = Entry(tb4)
@@ -235,20 +446,56 @@ class Jan_Cf(tk.Toplevel):
         lbfone_tb4 = Label(tb4, text='TELEFONE', anchor=W)
         vfone = Entry(tb4)
 
-# ------------------Adicionando Widgets a aba tb2 (botes, labels, etc)--------------------
+# ------------------ TB2 GERENCIAR FERRAMENTAS --------------------
 
-        lbid_tb2 = Label(tb2, text='ID', anchor=W)
-        vid = Entry(tb2)
+        # Componente Label
+        lbfab = Label(tb2, text="FABRICANTES :", font=("Times New Roman", 10))
+
+        # Componente Combobox
+        # n = tk.StringVar()
+        vfab = ttk.Combobox(tb2, width=27)  # , textvariable=n
+        # Adição de itens no Combobox
+        vfab['values'] = ("SONY",
+                            "CANON",
+                            "DJI")
+        vfab.current()
+
+        # Componente Label
+        lbvolt = Label(tb2, text="VOLTAGEM :", font=("Times New Roman", 10))
+
+        # Componente Combobox
+        # n = tk.StringVar()
+        vvolt = ttk.Combobox(tb2, width=27)  # , textvariable=n
+        # Adição de itens no Combobox
+        vvolt['values'] = ("127V",
+                          "220V")
+        vvolt.current()
+
+        vfab.current()
+
+        # Componente Label
+        lbuni = Label(tb2, text="UNIDADE :", font=("Times New Roman", 10))
+
+        # Componente Combobox
+        # n = tk.StringVar()
+        vuni = ttk.Combobox(tb2, width=27)  # , textvariable=n
+        # Adição de itens no Combobox
+        vuni['values'] = ("CM",
+                           "POLEGADA", "METROS")
+        vuni.current()
+
+        #lbid_tb2 = Label(tb2, text='ID', anchor=W)
+        #vid = Entry(tb2)
         lbdesc_tb2 = Label(tb2, text='DESCRIÇÃO', anchor=W)
         vdesc = Entry(tb2)
-        lbfab_tb2 = Label(tb2, text='FABRICANTES', anchor=W)
-        vfab = Entry(tb2)
-        lbvolt_tb2 = Label(tb2, text='VOLTAGEM', anchor=W)
-        vvolt = Entry(tb2)
+        #lbfab_tb2 = Label(tb2, text='FABRICANTES', anchor=W)
+        #vfab = Entry(tb2)
+        #lbvolt_tb2 = Label(tb2, text='VOLTAGEM', anchor=W)
+        #vvolt = Entry(tb2)
         lbtam_tb2 = Label(tb2, text='TAMANHO', anchor=W)
         vtam = Entry(tb2)
-        lbuni_tb2 = Label(tb2, text='UNIDADE', anchor=W)
-        vuni = Entry(tb2)
+        #lbuni = Label(tb2, text='UNIDADE', anchor=W)
+        #vuni = Entry(tb2)
         lbtipo_tb2 = Label(tb2, text='TIPO', anchor=W)
         vtipo = Entry(tb2)
         lbmat_tb2 = Label(tb2, text='MATERIAL', anchor=W)
@@ -260,6 +507,8 @@ class Jan_Cf(tk.Toplevel):
 
         lbidfer_tb5 = Label(tb5, text='ID Ferramenta', anchor=W)
         vidfer = Entry(tb5)
+        vidres = Entry(tb5)
+        vstatus = Entry(tb5)
         lbdesc_tb5 = Label(tb5, text='DESCRIÇÃO da solicitação', anchor=W)
         vdescres = Entry(tb5)
         lbdtret_tb5 = Label(tb5, text='DATA RETIRADA', anchor=W)
@@ -273,33 +522,33 @@ class Jan_Cf(tk.Toplevel):
         lbnmtec_tb5 = Label(tb5, text='NOME', anchor=W)
         vnmtec = Entry(tb5)
 
-        # -Botao para executar a funcao de adicionar dados ao treeview e ao BD pelo formulario--------------------------
+        # -BOTÃO FUNÇÃO ADICIONAR/RESERVAR--------------------------
 
         btn_adicionar_tb4 = Button(tb4, text='Adicionar', command=add_tvbd)
 
-        btn_adicionar_tb2 = Button(tb2, text='Adicionar')# command=add_tvbd2)
+        btn_adicionar_tb2 = Button(tb2, text='Adicionar', command=add_tvbd2)
 
-        btn_adicionar_tb5 = Button(tb5, text='Reservar')
+        btn_adicionar_tb5 = Button(tb5, text='Reservar', command=reservar)
 
         # -----------------------------------------------------------------------------------
 
-        # -Botao para executar a funcao de Excluir dados do treeview e do BD selecionando o item-----------------------
+        # ------------BOTÃO FUNÇÃO DELETAR-----------------------
 
         btn_excluir_tb4 = Button(tb4, text='Deletar', command=del_tvbd)
 
-        btn_excluir_tb2 = Button(tb2, text='Deletar') #command=del_tvbd2)
+        btn_excluir_tb2 = Button(tb2, text='Deletar', command=del_tvbd2)
 
         # --------------------------Download --------------------------------------------------
 
         btn_down_tb4 = Button(tb4, text='Download', command=download)
 
-        btn_down_tb2 = Button(tb2, text='Download') #command=download2)
+        btn_down_tb2 = Button(tb2, text='Download', command=download2)
 
-        btn_down_tb5 = Button(tb5, text='Download')
+        btn_down_tb5 = Button(tb5, text='Download', command=download3)
 
-        #--------------------------------DEVOLUÇÃO
+        #--------------------------------DEVOLUÇÃO---------------------------------------
 
-        btn_devol_tb5 = Button(tb5, text='Devolução')
+        btn_devol_tb5 = Button(tb5, text='Devolução', command=devolucao)
 
         ##-----------Adicionando o treeview na aba4 e carregando dados-------------------------
 
@@ -388,7 +637,9 @@ class Jan_Cf(tk.Toplevel):
             treeRes.heading(f"{i3}", text=f"{i3}")
 
         for n3 in tabela_reservas.values:
-            treeRes.insert('', tk.END, values=list(n3))
+            #print(n3[8]) #Chegando a coluna status da tabela que e igual ao item 8 da lista n3.
+            if n3[8] == 'PENDENTE':
+                treeRes.insert('', tk.END, values=list(n3))
 
         treeRes.place(x=4, y=100, width=1000, height=200)
 
@@ -397,17 +648,17 @@ class Jan_Cf(tk.Toplevel):
  # -------------------Posicionando os elementos na aba tb2----------------------
 
 
-        lbid_tb2.place(x=10, y=10, width=80, height=20)
-        vid.place(x=10, y=30, width=80, height=20)
+        #lbid_tb2.place(x=10, y=10, width=80, height=20)
+        #vid.place(x=10, y=30, width=80, height=20)
         lbdesc_tb2.place(x=100, y=10, width=80, height=20)
         vdesc.place(x=100, y=30, width=80, height=20)
-        lbfab_tb2.place(x=190, y=10, width=70, height=20)
+        lbfab.place(x=190, y=10, width=70, height=20)
         vfab.place(x=190, y=30, width=70, height=20)
-        lbvolt_tb2.place(x=270, y=10, width=70, height=20)
+        lbvolt.place(x=270, y=10, width=70, height=20)
         vvolt.place(x=270, y=30, width=70, height=20)
         lbtam_tb2.place(x=350, y=10, width=70, height=20)
         vtam.place(x=350, y=30, width=70, height=20)
-        lbuni_tb2.place(x=430, y=10, width=70, height=20)
+        lbuni.place(x=430, y=10, width=70, height=20)
         vuni.place(x=430, y=30, width=70, height=20)
         lbtipo_tb2.place(x=510, y=10, width=70, height=20)
         vtipo.place(x=510, y=30, width=70, height=20)
