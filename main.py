@@ -1,7 +1,7 @@
 #import pandas as pd
 import tkinter as tk
 from tkinter import *
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, Event
 from random import randint
 
 
@@ -413,7 +413,7 @@ class Jan_Cf(tk.Toplevel):
         def download3():
             tabela_reservas.to_excel(r'C:\Users\Public\Downloads\lista_reservas.xlsx')
             messagebox.showinfo(message='Download realizado com sucesso. Documento salvo em ' + r'C:\Users\Public\Downloads')
-
+       
 # -------------------------------------------------------------------------------------------------------#
 
         tb2 = Frame(my_note, width=250, height=150, bg='silver')
@@ -440,7 +440,7 @@ class Jan_Cf(tk.Toplevel):
         lbfone_tb4 = Label(tb4, text='TELEFONE', anchor=W)
         vfone = Entry(tb4)
 
-# ------------------ TB2 GERENCIAR FERRAMENTAS --------------------
+# ------------------ TB2 GERENCIAR FERRAMENTAS -------------------- 
 
         # Componente Label
         lbfab = Label(tb2, text="FABRICANTE ", font=("Times New Roman", 10), anchor=W,bg='silver')
@@ -496,8 +496,17 @@ class Jan_Cf(tk.Toplevel):
 
         #lbid_tb2 = Label(tb2, text='ID', anchor=W)
         #vid = Entry(tb2)
+
+    # Mostrar as letras em uppercase enquanto sao digitadas
+        
+        #def caps(event):
+            #v.set(v.get().upper())
+        
         lbdesc_tb2 = Label(tb2, text='DESCRIÇÃO', anchor=W, bg='silver')
-        vdesc = Entry(tb2)
+        #v = StringVar()
+        vdesc = Entry(tb2) # , textvariable=v
+        #vdesc.bind("<KeyRelease>", caps)
+        
         #lbfab_tb2 = Label(tb2, text='FABRICANTES', anchor=W)
         #vfab = Entry(tb2)
         #lbvolt_tb2 = Label(tb2, text='VOLTAGEM', anchor=W)
