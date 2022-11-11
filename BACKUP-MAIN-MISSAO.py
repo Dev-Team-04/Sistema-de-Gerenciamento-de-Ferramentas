@@ -16,59 +16,58 @@ tabela_reservas = pd.read_csv(r'lista_reservas.csv', sep=';', index_col=0)
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-        #TELA DE LOGIN:
+
         self.title('Tela de Login')
-        self.geometry('1000x700')
-        self.config(background='#373435')
+        self.geometry('936x700')
+        self.config(background='#008')
         self.bg = PhotoImage(file="TELA BEM VINDO 3.png")
-        self.label = Label(self, image=self.bg, width=980, height=690)
+        self.label = Label(self, image=self.bg, width=1000, height=700, bg='silver')
         self.label.place(x=0, y=0)
 
-        #LABEL E ENTRY TELA DE LOGIN
-        self.lb_usuario = Label(self, text="LOGIN", anchor=W,fg='white', bg='#444244')
+        self.lb_usuario = Label(self, text="LOGIN:", anchor=W, bg='white')
         self.lb_usuario.place(x=150, y=190, width=100, height=20)
         self.usuario = Entry(self, bg='white')
         self.usuario.place(x=150, y=220, width=100, height=20)
-        self.lb_senha = Label(self, text="PASSWORD", anchor=W,fg='white', bg='#444244')
+
+        self.lb_senha = Label(self, text="PASSWORD:", anchor=W, bg='white')
         self.lb_senha.place(x=150, y=250, width=100, height=20)
-        self.senha = Entry(self,show='*', bg='white')
+        self.senha = Entry(self, bg='white')
         self.senha.place(x=150, y=280, width=100, height=20)
-        #BOTA DE LOGIN
-        self.botao3 = Button(self, text="Login", fg='white', bg='#444244', anchor=W, command=self.abrir_jan_cf)
-        self.botao3.place(x=150, y=320, width=100, height=20)
-        #BOTAO DE MOSTRAR SENHA
-        self.botao4 = Button(self, text="Mostrar Senha", fg='white', bg='#444244', anchor=W, command=self.my_show)
-        self.botao4.place(x=150, y=350, width=100, height=20)
 
-    #FUNÇÃO DE MOSTRAR SENHA
-    def my_show(self):
-        if (len(self.senha.get())!=0):
-            self.senha.config(show='')
-        else:
-            messagebox.showinfo(message='Digite sua senha.')
+        self.botao3 = Button(self, text="Login", bg='white', anchor=W, command=self.abrir_jan_cf)
+        self.botao3.place(x=150, y=350, width=100, height=20)
 
-    #FUNCTION ABRIR JANELA
+        #self.usuario = Entry(self, bg='silver')
+        #self.usuario.place(x=10, y=220, width=150, height=20)
+        #
+
+        #
+
+        #
+
+
     def abrir_jan_cf(self):
         Jan_Cf()
 
-    #FUNCION PARA USUARIO E SENHA
+        #DESATIVEI PARA FAZER OS TESTES SEM PRECISAR POR LOGIN E SENHA
+
     # def abrir_jan_cf(self):
     #      if self.usuario.get() == 'devteam4' and self.senha.get() == 'devteam4':
     #         Jan_Cf()
     #      else:
-    #          messagebox.showinfo(title='Usuário ou senha inválidos!', message='Usuário ou senha inválidos!')
+    #          messagebox.showinfo(title='Usuario ou senha invalidos', message='Usuario ou senha invalidos')
 
 class Jan_Cf(tk.Toplevel):
     def __init__(self):
         super().__init__()
 
+
         self.title('Gerenciador de Ferramentas')
-        self.geometry('1000x700')
-        self.config(background='#373435')
-        #self.state("zoomed")
+        #self.geometry('2000x1080') # Apos inserir ZOOMED isso aqui não serve mais.
+        self.state("zoomed")
 
         my_note = ttk.Notebook(self)
-        my_note.place(x=0, y=0, width=1000, height=700)
+        my_note.place(x=0, y=0, width=1000, height=600)
 
 
 #------ FUNÇÃO --- DELETAR----SOMENTE --- TB4 -------- FUNCIONARIOS
