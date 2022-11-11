@@ -1,22 +1,24 @@
-import pandas as pd
+#import pandas as pd
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk, messagebox
 from random import randint
+
 
 #-----------
 
 nome_adm = 'devteam4'
 senha_adm = 'devteam4'
 
-tabela_ferramentas = pd.read_csv(r'lista_ferramentas.csv', sep=';', index_col=0, encoding= 'unicode_escape')
-tabela_funcionarios = pd.read_csv(r'lista_funcionarios.csv', sep=',', index_col=0)
-tabela_reservas = pd.read_csv(r'lista_reservas.csv', sep=';', index_col=0)
+#tabela_ferramentas = pd.read_csv(r'lista_ferramentas.csv', sep=';', index_col=0, encoding= 'unicode_escape')
+#tabela_funcionarios = pd.read_csv(r'lista_funcionarios.csv', sep=',', index_col=0)
+#tabela_reservas = pd.read_csv(r'lista_reservas.csv', sep=';', index_col=0)
 
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
         #TELA DE LOGIN:
+        self.iconbitmap(r'C:\Users\egalv\Documents\VSCODE\Sistema-de-Gerenciamento-de-Ferramentas-main\estacio_sem_nome.ico')
         self.title('Tela de Login')
         self.geometry('1000x700')
         self.config(background='#373435')
@@ -69,7 +71,6 @@ class Jan_Cf(tk.Toplevel):
 
         my_note = ttk.Notebook(self)
         my_note.place(x=0, y=0, width=1000, height=700)
-
 
 #------ FUNÇÃO --- DELETAR----SOMENTE --- TB4 -------- FUNCIONARIOS
 
@@ -289,8 +290,6 @@ class Jan_Cf(tk.Toplevel):
                     messagebox.showerror('Error', ep)
             # messagebox.showinfo('message', msg)
 
-
-
 # ----------FUNÇÃO --- DOWNLOAD ---- SOMENTE --- TB4 ---- FUNCIONARIOS
 
         def download():
@@ -321,8 +320,6 @@ class Jan_Cf(tk.Toplevel):
                 vfone.delete(0, END),
                 vradio.delete(0, END),
                 vnome.focus()
-
-
 
 # ----------------------------------RESERVAR TB5-----------------------------------------#
 
@@ -417,17 +414,13 @@ class Jan_Cf(tk.Toplevel):
             tabela_reservas.to_excel(r'C:\Users\Public\Downloads\lista_reservas.xlsx')
             messagebox.showinfo(message='Download realizado com sucesso. Documento salvo em ' + r'C:\Users\Public\Downloads')
 
-
 # -------------------------------------------------------------------------------------------------------#
 
-        tb2 = Frame(my_note, background='#008', width=250, height=150, bg='silver')
+        tb2 = Frame(my_note, width=250, height=150, bg='silver')
         my_note.add(tb2, text='Gerenciar Ferramentas')
 
         tb4 = Frame(my_note, bg='silver', width=250, height=150)
         my_note.add(tb4, text='Gerenciar Tecnicos')
-
-
-
 
         tb5 = Frame(my_note, bg='silver', width=250, height=150)
         my_note.add(tb5, text='Gerenciar Reservas')
@@ -450,7 +443,7 @@ class Jan_Cf(tk.Toplevel):
 # ------------------ TB2 GERENCIAR FERRAMENTAS --------------------
 
         # Componente Label
-        lbfab = Label(tb2, text="FABRICANTES :", font=("Times New Roman", 10))
+        lbfab = Label(tb2, text="FABRICANTE ", font=("Times New Roman", 10), anchor=W,bg='silver')
 
         # Componente Combobox
         # n = tk.StringVar()
@@ -462,7 +455,7 @@ class Jan_Cf(tk.Toplevel):
         vfab.current()
 
         # Componente Label
-        lbvolt = Label(tb2, text="VOLTAGEM :", font=("Times New Roman", 10))
+        lbvolt = Label(tb2, text="VOLTAGEM", font=("Times New Roman", 10), anchor=W, bg='silver')
 
         # Componente Combobox
         # n = tk.StringVar()
@@ -475,7 +468,7 @@ class Jan_Cf(tk.Toplevel):
         vvolt.current()
 
         # Componente Label
-        lbuni = Label(tb2, text="UNIDADE :", font=("Times New Roman", 10))
+        lbuni = Label(tb2, text="UNIDADE :", font=("Times New Roman", 10), anchor=W,bg='silver')
 
         # Componente Combobox
         # n = tk.StringVar()
@@ -503,21 +496,21 @@ class Jan_Cf(tk.Toplevel):
 
         #lbid_tb2 = Label(tb2, text='ID', anchor=W)
         #vid = Entry(tb2)
-        lbdesc_tb2 = Label(tb2, text='DESCRIÇÃO', anchor=W)
+        lbdesc_tb2 = Label(tb2, text='DESCRIÇÃO', anchor=W, bg='silver')
         vdesc = Entry(tb2)
         #lbfab_tb2 = Label(tb2, text='FABRICANTES', anchor=W)
         #vfab = Entry(tb2)
         #lbvolt_tb2 = Label(tb2, text='VOLTAGEM', anchor=W)
         #vvolt = Entry(tb2)
-        lbtam_tb2 = Label(tb2, text='TAMANHO', anchor=W)
+        lbtam_tb2 = Label(tb2, text='TAMANHO', anchor=W, bg='silver')
         vtam = Entry(tb2)
         #lbuni = Label(tb2, text='UNIDADE', anchor=W)
         #vuni = Entry(tb2)
-        lbtipo = Label(tb2, text='TIPO', anchor=W)
+        lbtipo = Label(tb2, text='TIPO', anchor=W, bg='silver')
         #vtipo = Entry(tb2)
-        lbmat = Label(tb2, text='MATERIAL', anchor=W)
+        lbmat = Label(tb2, text='MATERIAL', anchor=W, bg='silver')
         #vmat = Entry(tb2)
-        lbpn_tb2 = Label(tb2, text='PART NUMBER', anchor=W)
+        lbpn_tb2 = Label(tb2, text='PART NUMBER', anchor=W, bg='silver')
         vpn = Entry(tb2)
 
  # ------------------Adicionando Widgets a aba tb5 (botes, labels, etc)--------------------
@@ -541,9 +534,9 @@ class Jan_Cf(tk.Toplevel):
 
         # -BOTÃO FUNÇÃO ADICIONAR/RESERVAR--------------------------
 
-        btn_adicionar_tb4 = Button(tb4, text='Adicionar', command=add_tvbd)
+        btn_adicionar_tb4 = Button(tb4, text='Cadastrar', command=add_tvbd)
 
-        btn_adicionar_tb2 = Button(tb2, text='Adicionar', command=add_tvbd2)
+        btn_adicionar_tb2 = Button(tb2, text='Cadastrar', command=add_tvbd2)
 
         btn_adicionar_tb5 = Button(tb5, text='Reservar', command=reservar)
 
@@ -571,7 +564,7 @@ class Jan_Cf(tk.Toplevel):
 
 
         #dadosColunas = [item for item in Bd.tabela_funcionarios.columns]
-
+        """
         colunas = [item for item in tabela_funcionarios.columns]
 
         style = ttk.Style()
@@ -661,33 +654,40 @@ class Jan_Cf(tk.Toplevel):
         treeRes.place(x=4, y=100, width=1000, height=200)
 
         # ---------------------------------------------------------
-
+        """
  # -------------------Posicionando os elementos na aba tb2----------------------
 
 
         #lbid_tb2.place(x=10, y=10, width=80, height=20)
         #vid.place(x=10, y=30, width=80, height=20)
 
-
-        lbdesc_tb2.place(x=100, y=10, width=80, height=20)
-        vdesc.place(x=100, y=30, width=80, height=20)
-        lbfab.place(x=190, y=10, width=70, height=20)
-        vfab.place(x=190, y=30, width=70, height=20)
-        lbvolt.place(x=270, y=10, width=70, height=20)
-        vvolt.place(x=270, y=30, width=70, height=20)
-        lbtam_tb2.place(x=350, y=10, width=70, height=20)
-        vtam.place(x=350, y=30, width=70, height=20)
-        lbuni.place(x=430, y=10, width=70, height=20)
-        vuni.place(x=430, y=30, width=70, height=20)
-        lbtipo.place(x=510, y=10, width=70, height=20)
-        vtipo.place(x=510, y=30, width=70, height=20)
-        lbmat.place(x=590, y=10, width=70, height=20)
-        vmat.place(x=590, y=30, width=70, height=20)
-        lbpn_tb2.place(x=670, y=10, width=70, height=20)
-        vpn.place(x=670, y=30, width=70, height=20)
         btn_adicionar_tb2.place(x=10, y=300, width=80, height=20)
         btn_excluir_tb2.place(x=100, y=300, width=80, height=20)
         btn_down_tb2.place(x=190, y=300, width=80, height=20)
+
+        lbdesc_tb2.place(x=10, y=330, width=100, height=20)
+        vdesc.place(x=100, y=330, width=500, height=20)
+
+        lbfab.place(x=10, y=360, width=100, height=20)
+        vfab.place(x=100, y=360, width=70, height=20)
+
+        lbvolt.place(x=10, y=390, width=100, height=20)
+        vvolt.place(x=100, y=390, width=70, height=20)
+
+        lbtam_tb2.place(x=10, y=420, width=70, height=20)
+        vtam.place(x=100, y=420, width=70, height=20)
+
+        lbuni.place(x=10, y=450, width=70, height=20)
+        vuni.place(x=100, y=450, width=70, height=20)
+
+        lbtipo.place(x=10, y=480, width=70, height=20)
+        vtipo.place(x=100, y=480, width=70, height=20)
+
+        lbmat.place(x=10, y=510, width=70, height=20)
+        vmat.place(x=100, y=510, width=70, height=20)
+
+        lbpn_tb2.place(x=10, y=540, width=70, height=20)
+        vpn.place(x=100, y=540, width=70, height=20)
 
 # -------------------LABEL E ENTRY DA ABA TECNICOS TB4----------------------
 
@@ -730,8 +730,8 @@ class Jan_Cf(tk.Toplevel):
 
 #------------------Adicionando Widgets as demais abas (botes, labels, etc)--------------------
 
-        lbl_tb2 = Label(tb2, text='Gerenciar Ferramentas')
-        lbl_tb2.place(x=350, y=70, width=200, height=20)
+        #lbl_tb2 = Label(tb2, text='Gerenciar Ferramentas')
+        #lbl_tb2.place(x=350, y=70, width=200, height=20)
 
         lbl_tb4 = Label(tb4, text='Gerenciar Tecnicos')
         lbl_tb4.place(x=350, y=70, width=200, height=20)
