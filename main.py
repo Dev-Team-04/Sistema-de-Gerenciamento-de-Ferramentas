@@ -1,7 +1,7 @@
 import pandas as pd
 import tkinter as tk
 from tkinter import *
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, Event
 from random import randint
 
 #-----------
@@ -9,14 +9,16 @@ from random import randint
 nome_adm = 'devteam4'
 senha_adm = 'devteam4'
 
-tabela_ferramentas = pd.read_csv(r'lista_ferramentas.csv', sep=';', index_col=0, encoding= 'unicode_escape')
+tabela_ferramentas = pd.read_csv(r'lista_ferramentas.csv', sep=';', index_col=0, encoding='UTF-8')
 tabela_funcionarios = pd.read_csv(r'lista_funcionarios.csv', sep=',', index_col=0)
 tabela_reservas = pd.read_csv(r'lista_reservas.csv', sep=';', index_col=0)
 
+#TELA DE LOGIN
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
         #TELA DE LOGIN:
+        self.iconbitmap('estacio_sem_nome.ico')
         self.title('Tela de Login')
         self.geometry('1000x700')
         self.config(background='#373435')
@@ -25,7 +27,7 @@ class App(tk.Tk):
         self.label.place(x=0, y=0)
 
         #LABEL E ENTRY TELA DE LOGIN
-        self.lb_usuario = Label(self, text="LOGIN", anchor=W,fg='white', bg='#444244')
+        self.lb_usuario = Label(self, text="LOGIN", anchor=W, fg='white', bg='#444244')
         self.lb_usuario.place(x=150, y=190, width=100, height=20)
         self.usuario = Entry(self, bg='white')
         self.usuario.place(x=150, y=220, width=100, height=20)
@@ -49,6 +51,8 @@ class App(tk.Tk):
 
     #FUNCTION ABRIR JANELA
     def abrir_jan_cf(self):
+        #Encerrando a pagina de login
+        self.destroy()
         Jan_Cf()
 
     #FUNCION PARA USUARIO E SENHA
@@ -58,17 +62,16 @@ class App(tk.Tk):
     #      else:
     #          messagebox.showinfo(title='Usuário ou senha inválidos!', message='Usuário ou senha inválidos!')
 
-class Jan_Cf(tk.Toplevel):
+class Jan_Cf(tk.Tk):
     def __init__(self):
         super().__init__()
 
         self.title('Gerenciador de Ferramentas')
-        self.geometry('1000x700')
+        self.geometry('1270x799')
         self.config(background='#373435')
         #self.state("zoomed")
-
         my_note = ttk.Notebook(self)
-        my_note.place(x=0, y=0, width=1000, height=700)
+        my_note.place(x=0, y=0, width=1280, height=800)
 
 
 #------ FUNÇÃO --- DELETAR----SOMENTE --- TB4 -------- FUNCIONARIOS
@@ -87,7 +90,7 @@ class Jan_Cf(tk.Toplevel):
                 tabela_funcionarios = tabela_funcionarios.drop(['index'], axis=1)
                 tabela_funcionarios.to_csv(r'lista_funcionarios.csv')
 
-# ------ FUNÇÃO --- DELETAR----SOMENTE --- TB2 -------- FUNCIONARIOS
+# ------ FUNCTION DELETAR ABA GERENCIAR FERRAMENTAS "TB2
 
         def del_tvbd2():
             if not treeFer.selection():
@@ -106,8 +109,8 @@ class Jan_Cf(tk.Toplevel):
                 tabela_ferramentas.to_csv(r'lista_ferramentas.csv', sep=';')
 
         def val_fer():
-            descricao = vdesc.get()
-            fabricante = vfab.get()
+            descricao = v.get()
+            fabricante = v2.get()
             voltagem = vvolt.get()
             pnumber = vpn.get()
             tamanho = vtam.get()
@@ -135,7 +138,7 @@ class Jan_Cf(tk.Toplevel):
                     if len(descricao) > 60: # elif len(name) <= 5 or len(name) >40: return 'O nome deve ser entre 05 a 40 caracteres'
                         return 'descricao deve ter até 60'
                     if len(fabricante) > 30:
-                        return 'fabricante deve ter até 40 caracteres'
+                        return 'fabricante deve ter até 30 caracteres'
                     if len(voltagem) > 15: # Podem ser as opções para escolher uma (manha, tarde, noite)
                         return 'voltagem deve ter até 15 caracteres'
                     if len(pnumber) > 25:
@@ -164,9 +167,9 @@ class Jan_Cf(tk.Toplevel):
             #     messagebox.showinfo('erro', message='Preencha todos os campos')
             else:
                 treeFer.insert('', tk.END,
-                values=(gerar_id(), vdesc.get(), vfab.get(), vvolt.get(), vtam.get(), vuni.get(),
+                values =(gerar_id(), v.get(), v2.get(), vvolt.get(), vtam.get(), vuni.get(),
                 vtipo.get(),vmat.get(),vpn.get()))
-                lista_add = [gerar_id(), vdesc.get(), vfab.get(), vvolt.get(), vtam.get(), vuni.get(),
+                lista_add = [gerar_id(), v.get(), v2.get(), vvolt.get(), vtam.get(), vuni.get(),
                 vtipo.get(),vmat.get(),vpn.get()]
                 #print(Bd.tabela_ferramentas)
                 tabela_ferramentas.loc[len(tabela_ferramentas)] = lista_add
@@ -185,7 +188,7 @@ class Jan_Cf(tk.Toplevel):
 
         def gerar_id():
             bd_fer = pd.read_csv(r'lista_ferramentas.csv', sep=';', index_col=0)
-            lista_ids_existentes = bd_fer['id']
+            lista_ids_existentes = bd_fer['ID']
             id = randint(1, 100000)
             while id in lista_ids_existentes:
                 id = randint(1, 100000)
@@ -420,10 +423,10 @@ class Jan_Cf(tk.Toplevel):
 
 # -------------------------------------------------------------------------------------------------------#
 
-        tb2 = Frame(my_note, background='#008', width=250, height=150, bg='silver')
+        tb2 = Frame(my_note, width=250, height=150, bg='#373435', borderwidth=0)
         my_note.add(tb2, text='Gerenciar Ferramentas')
 
-        tb4 = Frame(my_note, bg='silver', width=250, height=150)
+        tb4 = Frame(my_note, bg='#373435', width=250, height=150)
         my_note.add(tb4, text='Gerenciar Tecnicos')
 
 
@@ -450,74 +453,76 @@ class Jan_Cf(tk.Toplevel):
 # ------------------ TB2 GERENCIAR FERRAMENTAS --------------------
 
         # Componente Label
-        lbfab = Label(tb2, text="FABRICANTES :", font=("Times New Roman", 10))
+        def caps2(event):
+            v2.set(v2.get().upper())
+            if len(v2.get()) > 30:
+                messagebox.showinfo(message='DESCRIÇÃO ULTRAPASSOU O LIMITE DE 30 CARACTERES!')
 
+        v2 = StringVar()
+        lbfab = Label(tb2, anchor=W, text="FABRICANTE", fg='white', bg='#373435')
+        vfab = Entry(tb2, textvariable=v2)
+        vfab.bind("<KeyRelease>", caps2)
         # Componente Combobox
         # n = tk.StringVar()
-        vfab = ttk.Combobox(tb2, width=27)  # , textvariable=n
-        # Adição de itens no Combobox
-        vfab['values'] = ("SONY",
-                            "CANON",
-                            "DJI")
-        vfab.current()
+        # vfab = ttk.Combobox(tb2, width=27)  # , textvariable=n
+        # # Adição de itens no Combobox
+        # vfab['values'] = ("SONY",
+        #                     "CANON",
+        #                     "DJI")
+        # vfab.current()
 
         # Componente Label
-        lbvolt = Label(tb2, text="VOLTAGEM :", font=("Times New Roman", 10))
-
+        lbvolt = Label(tb2, text="VOLTAGEM", fg='white', anchor=W, bg='#373435')
         # Componente Combobox
         # n = tk.StringVar()
-        vvolt = ttk.Combobox(tb2, width=27)  # , textvariable=n
+        vvolt = ttk.Combobox(tb2, width=27)
         # Adição de itens no Combobox
         vvolt['values'] = ("127V",
-                          "220V")
+                          "220V",
+                           'BIVOLT')
         vvolt.current()
 
-        vvolt.current()
-
-        # Componente Label
-        lbuni = Label(tb2, text="UNIDADE :", font=("Times New Roman", 10))
 
         # Componente Combobox
-        # n = tk.StringVar()
-        vuni = ttk.Combobox(tb2, width=27)  # , textvariable=n
+        lbuni = Label(tb2, text="UNIDADE",anchor=W, fg='white', bg='#373435')
+        vuni = ttk.Combobox(tb2, width=27)
         # Adição de itens no Combobox
         vuni['values'] = ("CM",
                            "POLEGADA", "METROS")
         vuni.current()
 
         # Componente Combobox
-        # n = tk.StringVar()
-        vmat = ttk.Combobox(tb2, width=27)  # , textvariable=n
-        # Adição de itens no Combobox
+        lbmat = Label(tb2, text='MATERIAL', anchor=W, fg='white', bg='#373435')
+        vmat = ttk.Combobox(tb2, width=27)
+        #Adição de itens no Combobox
         vmat['values'] = ("PLASTICO",
                           "AÇO", "MADEIRA","VIDRO")
         vmat.current()
 
         # Componente Combobox
-        # n = tk.StringVar()
+        lbtipo = Label(tb2, text='TIPO', anchor=W, fg='white', bg='#373435')
         vtipo = ttk.Combobox(tb2, width=27)  # , textvariable=n
-        # Adição de itens no Combobox
+        #Adição de itens no Combobox
         vtipo['values'] = ("ELTRICO",
                           "MECANICA", "SEGURANÇA")
         vtipo.current()
 
-        #lbid_tb2 = Label(tb2, text='ID', anchor=W)
-        #vid = Entry(tb2)
-        lbdesc_tb2 = Label(tb2, text='DESCRIÇÃO', anchor=W)
-        vdesc = Entry(tb2)
-        #lbfab_tb2 = Label(tb2, text='FABRICANTES', anchor=W)
-        #vfab = Entry(tb2)
-        #lbvolt_tb2 = Label(tb2, text='VOLTAGEM', anchor=W)
-        #vvolt = Entry(tb2)
-        lbtam_tb2 = Label(tb2, text='TAMANHO', anchor=W)
+        lbtam_tb2 = Label(tb2, text='TAMANHO', anchor=W, fg='white', bg='#373435')
         vtam = Entry(tb2)
-        #lbuni = Label(tb2, text='UNIDADE', anchor=W)
-        #vuni = Entry(tb2)
-        lbtipo = Label(tb2, text='TIPO', anchor=W)
-        #vtipo = Entry(tb2)
-        lbmat = Label(tb2, text='MATERIAL', anchor=W)
-        #vmat = Entry(tb2)
-        lbpn_tb2 = Label(tb2, text='PART NUMBER', anchor=W)
+
+        #Mostrar as letras em uppercase enquanto sao digitadas
+        def caps(event):
+            v.set(v.get().upper())
+            if len(v.get()) > 60:
+                messagebox.showinfo(message='DESCRIÇÃO ULTRAPASSOU O LIMITE DE 60 CARACTERES!')
+        v = StringVar()
+
+        lbdesc_tb2 = Label(tb2, text='DESCRIÇÃO', anchor=W, fg='white', bg='#373435')
+        vdesc = Entry(tb2, textvariable=v)
+        vdesc.bind("<KeyRelease>", caps)
+
+
+        lbpn_tb2 = Label(tb2, text='PART NUMBER', anchor=W, fg='white', bg='#373435')
         vpn = Entry(tb2)
 
  # ------------------Adicionando Widgets a aba tb5 (botes, labels, etc)--------------------
@@ -588,7 +593,7 @@ class Jan_Cf(tk.Toplevel):
         ytreeScroll2 = ttk.Scrollbar(tb4)
         ytreeScroll2.configure(command=treeProdutos.yview)
 
-        xtreeScroll2 = ttk.Scrollbar(tb4, orient='horizontal')
+        xtreeScroll2 = ttk.Scrollbar( tb4, orient='horizontal')
         xtreeScroll2.configure(command=treeProdutos.xview)
 
         treeProdutos.configure(yscrollcommand=ytreeScroll2.set, xscrollcommand=xtreeScroll2.set)
@@ -607,14 +612,17 @@ class Jan_Cf(tk.Toplevel):
         # -----------Treeview da aba de ferramentas --------------
 
         dadosColunas2 = [item2 for item2 in tabela_ferramentas.columns]
+        #DEFININDO A COR DO TREEVIEW
+        style = ttk.Style()
+        style.configure('Treeview', background='#444244', rowheight=25, foreground="white", fieldbackground='#444244')
 
         treeFer = ttk.Treeview(tb2, columns=dadosColunas2, show='headings')
 
         # Adding a scrollbar to Treeview widget
-        ytreeScroll = ttk.Scrollbar(tb2)
+        ytreeScroll = ttk.Scrollbar(treeFer)
         ytreeScroll.configure(command=treeFer.yview)
 
-        xtreeScroll = ttk.Scrollbar(tb2, orient='horizontal')
+        xtreeScroll = ttk.Scrollbar(treeFer, orient='horizontal')
         xtreeScroll.configure(command=treeFer.xview)
 
         treeFer.configure(yscrollcommand=ytreeScroll.set, xscrollcommand=xtreeScroll.set)
@@ -628,7 +636,8 @@ class Jan_Cf(tk.Toplevel):
         for n2 in tabela_ferramentas.values:
             treeFer.insert('', tk.END, values=list(n2))
 
-        treeFer.place(x=4, y=100, width=1000, height=200)
+        treeFer.place(x=1, y=1, width=1270, height=290)
+
 
         # ----------------------------------------------------------
 
@@ -662,29 +671,35 @@ class Jan_Cf(tk.Toplevel):
 
         # ---------------------------------------------------------
 
- # -------------------Posicionando os elementos na aba tb2----------------------
+#--------------------- POSIÇÃO DOS ELEMENTOS LABELS E ENTRY ABA GERENCIAR FERRAMENTAS "TB2"
 
+        # lbid_tb2.place(x=10, y=10, width=80, height=20)
+        # vid.place(x=10, y=30, width=80, height=20)
 
-        #lbid_tb2.place(x=10, y=10, width=80, height=20)
-        #vid.place(x=10, y=30, width=80, height=20)
+        lbpn_tb2.place(x=10, y=540, width=90, height=20)
+        vpn.place(x=100, y=540, width=90, height=20)
 
+        lbdesc_tb2.place(x=10, y=330, width=100, height=20)
+        vdesc.place(x=100, y=330, width=500, height=20)
 
-        lbdesc_tb2.place(x=100, y=10, width=80, height=20)
-        vdesc.place(x=100, y=30, width=80, height=20)
-        lbfab.place(x=190, y=10, width=70, height=20)
-        vfab.place(x=190, y=30, width=70, height=20)
-        lbvolt.place(x=270, y=10, width=70, height=20)
-        vvolt.place(x=270, y=30, width=70, height=20)
-        lbtam_tb2.place(x=350, y=10, width=70, height=20)
-        vtam.place(x=350, y=30, width=70, height=20)
-        lbuni.place(x=430, y=10, width=70, height=20)
-        vuni.place(x=430, y=30, width=70, height=20)
-        lbtipo.place(x=510, y=10, width=70, height=20)
-        vtipo.place(x=510, y=30, width=70, height=20)
-        lbmat.place(x=590, y=10, width=70, height=20)
-        vmat.place(x=590, y=30, width=70, height=20)
-        lbpn_tb2.place(x=670, y=10, width=70, height=20)
-        vpn.place(x=670, y=30, width=70, height=20)
+        lbfab.place(x=10, y=360, width=100, height=20)
+        vfab.place(x=100, y=360, width=250, height=20)
+
+        lbvolt.place(x=10, y=390, width=100, height=20)
+        vvolt.place(x=100, y=390, width=90, height=20)
+
+        lbtam_tb2.place(x=10, y=420, width=70, height=20)
+        vtam.place(x=100, y=420, width=90, height=20)
+
+        lbuni.place(x=10, y=450, width=70, height=20)
+        vuni.place(x=100, y=450, width=90, height=20)
+
+        lbtipo.place(x=10, y=480, width=70, height=20)
+        vtipo.place(x=100, y=480, width=90, height=20)
+
+        lbmat.place(x=10, y=510, width=70, height=20)
+        vmat.place(x=100, y=510, width=90, height=20)
+
         btn_adicionar_tb2.place(x=10, y=300, width=80, height=20)
         btn_excluir_tb2.place(x=100, y=300, width=80, height=20)
         btn_down_tb2.place(x=190, y=300, width=80, height=20)
@@ -730,8 +745,8 @@ class Jan_Cf(tk.Toplevel):
 
 #------------------Adicionando Widgets as demais abas (botes, labels, etc)--------------------
 
-        lbl_tb2 = Label(tb2, text='Gerenciar Ferramentas')
-        lbl_tb2.place(x=350, y=70, width=200, height=20)
+        # lbl_tb2 = Label(tb2, text='Gerenciar Ferramentas')
+        # lbl_tb2.place(x=350, y=70, width=200, height=20)
 
         lbl_tb4 = Label(tb4, text='Gerenciar Tecnicos')
         lbl_tb4.place(x=350, y=70, width=200, height=20)

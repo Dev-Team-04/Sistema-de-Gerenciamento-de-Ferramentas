@@ -1,7 +1,3 @@
-;id;descricao;fabricantes;voltagem;tamanho;unidade;tipo;material;part_number
-0;8; Filmadora Canon XA55 ;CANON;220v;26.42;CM;elÃÂ©trica;plÃÂ¡stico;599656
-1;1;LENTE Sony E PZ 18-105mm;SONY;110v;10.0;CM;mecÃÂÃÂ¢nica;ferro;777126
-2;10;CONJUNTO DE LAMPADAS E REFLETORES;ESTACIO;220v;30.0;POL;seguranÃÂÃÂ§a;madeira;874681
-3;2;MIC DR70 ;TASCAM;110v;10.0;CM;seguranÃÂÃÂ§a;plÃÂ¡stico;870980
-4;6;LENTE  Canon Ef 75-300mm;CANON;220v;10.0;M;seguranÃÂÃÂ§a;plÃÂ¡stico;863211
-5;30579;Drone Top das galaxya;DJI;220V;60;cm;mecanica;PLASTICO;654321
+;ID;DESCRIÇÃO;FABRICANTES;VOLTAGEM;TAMANHO;UNIDADE;TIPO;MATERIAL;PART NUMBER
+0;39477;TESTE FERRAMENTA ESCRITA MAIUSCULA;SONY;220V;199;CM;ELTRICO;AÇO;87654321
+1;87293;TESTE ESCRITA;DJI;220V;49 × 36 × 29;CM;ELTRICO;AÇO;87654321
