@@ -10,8 +10,8 @@ nome_adm = 'devteam4'
 senha_adm = 'devteam4'
 
 tabela_ferramentas = pd.read_csv(r'lista_ferramentas.csv', sep=';', index_col=0, encoding='UTF-8')
-tabela_funcionarios = pd.read_csv(r'lista_funcionarios.csv', sep=',', index_col=0)
-tabela_reservas = pd.read_csv(r'lista_reservas.csv', sep=';', index_col=0)
+tabela_funcionarios = pd.read_csv(r'lista_funcionarios.csv', sep=',', index_col=0, encoding='UTF-8')
+tabela_reservas = pd.read_csv(r'lista_reservas.csv', sep=';', index_col=0, encoding='UTF-8')
 
 #TELA DE LOGIN
 class App(tk.Tk):
@@ -31,7 +31,7 @@ class App(tk.Tk):
         self.lb_usuario.place(x=150, y=190, width=100, height=20)
         self.usuario = Entry(self, bg='white')
         self.usuario.place(x=150, y=220, width=100, height=20)
-        self.lb_senha = Label(self, text="PASSWORD", anchor=W,fg='white', bg='#444244')
+        self.lb_senha = Label(self, text="PASSWORD", anchor=W, fg='white', bg='#444244')
         self.lb_senha.place(x=150, y=250, width=100, height=20)
         self.senha = Entry(self,show='*', bg='white')
         self.senha.place(x=150, y=280, width=100, height=20)
@@ -67,21 +67,24 @@ class Jan_Cf(tk.Tk):
         super().__init__()
 
         self.title('Gerenciador de Ferramentas')
-        self.geometry('1270x799')
         self.config(background='#373435')
-        #self.state("zoomed")
+
+        width_value = self.winfo_screenwidth()
+        height_value = self.winfo_screenheight()
+        self.geometry('%dx%d+0+0' % (width_value, height_value))
+
         my_note = ttk.Notebook(self)
-        my_note.place(x=0, y=0, width=1280, height=800)
+        my_note.place(x=0, y=0, width=width_value, height=height_value)
 
 
 #------ FUNÇÃO --- DELETAR----SOMENTE --- TB4 -------- FUNCIONARIOS
 
         def del_tvbd():
-            if not treeProdutos.selection():
-                messagebox.showinfo(title='erro', message='Selecione o elemento a ser deletado')
+            if not treeTec.selection():
+                messagebox.showinfo(title='Atenção!', message='SELECIONE O ELEMENTO A SER DELETADO.')
             else:
-                index = treeProdutos.index(treeProdutos.selection()[0])
-                treeProdutos.delete(treeProdutos.selection()[0])
+                index = treeTec.index(treeTec.selection()[0])
+                treeTec.delete(treeTec.selection()[0])
                 # print(tabela_funcionarios)
                 tabela_funcionarios = pd.read_csv(r'lista_funcionarios.csv', sep=',', index_col=0)
                 tabela_funcionarios = tabela_funcionarios.drop([index])
@@ -94,7 +97,7 @@ class Jan_Cf(tk.Tk):
 
         def del_tvbd2():
             if not treeFer.selection():
-                messagebox.showinfo(title='erro', message='Selecione o elemento a ser deletado')
+                messagebox.showinfo(title='Atenção!', message='SELECIONE O ELEMENTO A SER DELETADO.')
             else:
                 index = treeFer.index(treeFer.selection()[0])
                 #print(index)
@@ -118,21 +121,21 @@ class Jan_Cf(tk.Tk):
             tipofer = vtipo.get()
             matfer = vmat.get()
             if len(descricao) == 0:
-                return 'descricao não pode estar vazio'
+                return 'DESCRIÇÃO NÃO PODE ESTAR VAZIO!'
             if len(fabricante) == 0:
-                return 'fabricante não pode estar vazio'
+                return 'FABRICANTE NÃO PODE ESTAR VAZIO!'
             if len(voltagem) == 0:
-                return 'voltagem não pode estar vazio'
+                return 'VOLTAGEM NÃO PODE ESTAR VAZIO!'
             if len(pnumber) == 0:
-                return 'descricao não pode estar vazio'
+                return 'PART NUMBER NÃO PODE ESTAR VAZIO!'
             if len(tamanho) == 0:
-                return 'fabricante não pode estar vazio'
+                return 'TAMANHO NÃO PODE ESTAR VAZIO!'
             if len(unidade) == 0:
-                return 'voltagem não pode estar vazio'
+                return 'UNIDADE NÃO PODE ESTAR VAZIO!'
             if len(tipofer) == 0:
-                return 'descricao não pode estar vazio'
+                return 'TIPO NÃO PODE ESTAR VAZIO!'
             if len(matfer) == 0:
-                return 'fabricante não pode estar vazio'
+                return 'MATERIAL NÃO PODE ESTAR VAZIO!'
             else:
                 try:
                     if len(descricao) > 60: # elif len(name) <= 5 or len(name) >40: return 'O nome deve ser entre 05 a 40 caracteres'
@@ -305,13 +308,12 @@ class Jan_Cf(tk.Tk):
 
         def add_tvbd():
             if validation() != 'Sucess!':
-                # or vturno.get() =='' or vequipe.get() =='' or vcpf.get() =='' or vfone.get() =='':
-                messagebox.showinfo('erro', message=validation())
+                messagebox.showinfo('Atenção!', message=validation())
             else:
-                treeProdutos.insert('', tk.END,
+                treeTec.insert('', tk.END,
                                     values=(
-                                    vnome.get(), vturno.get(), vequipe.get(), vcpf.get(), vfone.get(), vradio.get()))
-                lista_add = [vnome.get(), vturno.get(), vequipe.get(), vcpf.get(), str(vfone.get()),
+                                    v3.get(), vturno.get(), v4.get(), vcpf.get(), vfone.get(), vradio.get()))
+                lista_add = [v3.get(), vturno.get(), v4.get(), vcpf.get(), str(vfone.get()),
                              str(vradio.get())]
                 # print(tabela_funcionarios)
                 tabela_funcionarios.loc[len(tabela_funcionarios)] = lista_add
@@ -437,17 +439,35 @@ class Jan_Cf(tk.Tk):
 
 # ------------------TB4 GERENCIAR TECNICOS--------------------
 
-        lbradio_tb4 = Label(tb4, text='RADIO', anchor=W)
+
+        def caps3(event):
+            v3.set(v3.get().upper())
+            if len(v3.get()) > 40:
+                messagebox.showinfo(message='NOME COMPLETO ULTRAPASSOU O LIMITE DE 40 CARACTERES!')
+        v3 = StringVar()
+        lbnome_tb4 = Label(tb4, text='NOME', anchor=W, fg='white', bg='#373435')
+        vnome = Entry(tb4, textvariable=v3)
+        vnome.bind("<KeyRelease>", caps3)
+        def caps4(event):
+            v4.set(v4.get().upper())
+            if len(v4.get()) > 30:
+                messagebox.showinfo(message='NOME DA EQUIPE ULTRAPASSOU O LIMITE DE 30 CARACTERES!')
+        v4 = StringVar()
+        lbequipe_tb4 = Label(tb4, text='EQUIPE', anchor=W, fg='white', bg='#373435')
+        vequipe = Entry(tb4, textvariable=v4)
+        vequipe.bind("<KeyRelease>", caps4)
+
+        lbturno_tb4 = Label(tb4, text="TURNO", anchor=W, fg='white', bg='#373435')
+        vturno = ttk.Combobox(tb4, width=27)
+        vturno['values'] = ("MANHÃ",
+                          "TARDE", "NOITE")
+        vturno.current()
+
+        lbradio_tb4 = Label(tb4, text='RADIO', anchor=W, fg='white', bg='#373435')
         vradio = Entry(tb4)
-        lbnome_tb4 = Label(tb4, text='NOME', anchor=W)
-        vnome = Entry(tb4)
-        lbturno_tb4 = Label(tb4, text='TURNO', anchor=W)
-        vturno = Entry(tb4)
-        lbequipe_tb4 = Label(tb4, text='EQUIPE', anchor=W)
-        vequipe = Entry(tb4)
-        lbcpf_tb4 = Label(tb4, text='CPF', anchor=W)
+        lbcpf_tb4 = Label(tb4, text='CPF', anchor=W, fg='white', bg='#373435')
         vcpf = Entry(tb4)
-        lbfone_tb4 = Label(tb4, text='TELEFONE', anchor=W)
+        lbfone_tb4 = Label(tb4, text='TELEFONE', anchor=W, fg='white', bg='#373435')
         vfone = Entry(tb4)
 
 # ------------------ TB2 GERENCIAR FERRAMENTAS --------------------
@@ -546,9 +566,9 @@ class Jan_Cf(tk.Tk):
 
         # -BOTÃO FUNÇÃO ADICIONAR/RESERVAR--------------------------
 
-        btn_adicionar_tb4 = Button(tb4, text='Adicionar', command=add_tvbd)
+        btn_adicionar_tb4 = Button(tb4, text='Cadastrar', command=add_tvbd)
 
-        btn_adicionar_tb2 = Button(tb2, text='Adicionar', command=add_tvbd2)
+        btn_adicionar_tb2 = Button(tb2, text='Cadastrar', command=add_tvbd2)
 
         btn_adicionar_tb5 = Button(tb5, text='Reservar', command=reservar)
 
@@ -572,7 +592,7 @@ class Jan_Cf(tk.Tk):
 
         btn_devol_tb5 = Button(tb5, text='Devolução', command=devolucao)
 
-        ##-----------Adicionando o treeview na aba4 e carregando dados-------------------------
+        ##-----------Adicionando o treeview na tb4 e carregando dados-------------------------
 
 
         #dadosColunas = [item for item in Bd.tabela_funcionarios.columns]
@@ -585,29 +605,29 @@ class Jan_Cf(tk.Tk):
                         fieldbackground='silver')
         style.map('Treeview', background=[('selected', 'red')])
 
-        treeProdutos = ttk.Treeview(tb4,
+        treeTec = ttk.Treeview(tb4,
                                     columns=colunas,
                                     show='headings')
 
         # Adding a scrollbar to Treeview widget
-        ytreeScroll2 = ttk.Scrollbar(tb4)
-        ytreeScroll2.configure(command=treeProdutos.yview)
+        ytreeScroll2 = ttk.Scrollbar(treeTec)
+        ytreeScroll2.configure(command=treeTec.yview)
 
-        xtreeScroll2 = ttk.Scrollbar( tb4, orient='horizontal')
-        xtreeScroll2.configure(command=treeProdutos.xview)
+        xtreeScroll2 = ttk.Scrollbar( treeTec, orient='horizontal')
+        xtreeScroll2.configure(command=treeTec.xview)
 
-        treeProdutos.configure(yscrollcommand=ytreeScroll2.set, xscrollcommand=xtreeScroll2.set)
+        treeTec.configure(yscrollcommand=ytreeScroll2.set, xscrollcommand=xtreeScroll2.set)
 
         xtreeScroll2.pack(side=BOTTOM, fill='x')
         ytreeScroll2.pack(side=RIGHT, fill=BOTH)
 
         for i in colunas:
-            treeProdutos.heading(f"{i}", text=f"{i}")
+            treeTec.heading(f"{i}", text=f"{i}")
 
         for n in tabela_funcionarios.values:
-            treeProdutos.insert('', tk.END, values=list(n))
+            treeTec.insert('', tk.END, values=list(n))
 
-        treeProdutos.place(x=4, y=100, width=1000, height=200)
+        treeTec.place(x=1, y=1, width=width_value -5, height=290)
 
         # -----------Treeview da aba de ferramentas --------------
 
@@ -636,7 +656,7 @@ class Jan_Cf(tk.Tk):
         for n2 in tabela_ferramentas.values:
             treeFer.insert('', tk.END, values=list(n2))
 
-        treeFer.place(x=1, y=1, width=1270, height=290)
+        treeFer.place(x=1, y=1, width=width_value -5, height=290)
 
 
         # ----------------------------------------------------------
@@ -704,20 +724,21 @@ class Jan_Cf(tk.Tk):
         btn_excluir_tb2.place(x=100, y=300, width=80, height=20)
         btn_down_tb2.place(x=190, y=300, width=80, height=20)
 
-# -------------------LABEL E ENTRY DA ABA TECNICOS TB4----------------------
+# -------------------LABEL E ENTRY DA ABA TÉCNICOS TB4----------------------
 
-        lbnome_tb4.place(x=10, y=10, width=80, height=20)
-        vnome.place(x=10, y=30, width=80, height=20)
-        lbturno_tb4.place(x=100, y=10, width=80, height=20)
-        vturno.place(x=100, y=30, width=80, height=20)
-        lbequipe_tb4.place(x=190, y=10, width=70, height=20)
-        vequipe.place(x=190, y=30, width=70, height=20)
-        lbcpf_tb4.place(x=270, y=10, width=70, height=20)
-        vcpf.place(x=270, y=30, width=70, height=20)
-        lbfone_tb4.place(x=360, y=10, width=80, height=20)
-        lbradio_tb4.place(x=450, y=10, width=80, height=20)
-        vradio.place(x=450, y=30, width=80, height=20)
-        vfone.place(x=360, y=30, width=80, height=20)
+        lbnome_tb4.place(x=10, y=330, width=80, height=20)
+        vnome.place(x=100, y=330, width=300, height=20)
+        lbturno_tb4.place(x=10, y=390, width=80, height=20)
+        vturno.place(x=100, y=390, width=90, height=20)
+        lbequipe_tb4.place(x=10, y=360, width=70, height=20)
+        vequipe.place(x=100, y=360, width=200, height=20)
+        lbcpf_tb4.place(x=10, y=420, width=70, height=20)
+        vcpf.place(x=100, y=420, width=90, height=20)
+        lbfone_tb4.place(x=10, y=450, width=80, height=20)
+        vfone.place(x=100, y=450, width=90, height=20)
+        lbradio_tb4.place(x=10, y=480, width=80, height=20)
+        vradio.place(x=100, y=480, width=90, height=20)
+
         btn_adicionar_tb4.place(x=10, y=300, width=80, height=20)
         btn_excluir_tb4.place(x=100, y=300, width=80, height=20)
         #btn_carregar_tb4.place(x=190, y=300, width=80, height=20)
@@ -742,17 +763,6 @@ class Jan_Cf(tk.Tk):
         vhrdev.place(x=430, y=30, width=70, height=20)
         lbnmtec_tb5.place(x=510, y=10, width=70, height=20)
         vnmtec.place(x=510, y=30, width=70, height=20)
-
-#------------------Adicionando Widgets as demais abas (botes, labels, etc)--------------------
-
-        # lbl_tb2 = Label(tb2, text='Gerenciar Ferramentas')
-        # lbl_tb2.place(x=350, y=70, width=200, height=20)
-
-        lbl_tb4 = Label(tb4, text='Gerenciar Tecnicos')
-        lbl_tb4.place(x=350, y=70, width=200, height=20)
-
-        lbl_tb5 = Label(tb5, text='Gerenciar Reservas')
-        lbl_tb5.place(x=350, y=70, width=200, height=20)
 
 if __name__ == "__main__":
     root = App()
