@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import *
 from tkinter import ttk, messagebox, Event
 from random import randint
+from tkcalendar import *
 
 #-----------
 
@@ -43,6 +44,7 @@ class App(tk.Tk):
         #BOTAO DE MOSTRAR SENHA
         self.botao4 = Button(self, text="Mostrar Senha", fg='white', bg='#444244', anchor=W, command=self.my_show)
         self.botao4.place(x=150, y=350, width=100, height=20)
+
 
     #FUNÇÃO DE MOSTRAR SENHA
     def my_show(self):
@@ -94,6 +96,8 @@ class Jan_Cf(tk.Tk):
                 # print(tabela_funcionarios)
                 tabela_funcionarios = tabela_funcionarios.drop(['index'], axis=1)
                 tabela_funcionarios.to_csv(r'lista_funcionarios.csv')
+
+
 
 # ------ FUNCTION DELETAR ABA GERENCIAR FERRAMENTAS "TB2
 
@@ -337,8 +341,10 @@ class Jan_Cf(tk.Tk):
 # ----------------------------------RESERVAR TB5-----------------------------------------#
 
         def reservar():
-            lista_idfer = tabela_ferramentas['id'].tolist()
+            lista_idfer = tabela_ferramentas['ID'].tolist()
+            print(lista_idfer)
             lista_idres = tabela_reservas['Id ferramenta'].tolist()
+            print(lista_idres)
             if int(vidfer.get()) not in lista_idfer:
                 messagebox.showinfo('erro', message='Id da ferramenta não localizado. Consulte a tabela'
                                                     'de ferramentas para verificação')
@@ -433,13 +439,10 @@ class Jan_Cf(tk.Tk):
         tb2 = Frame(my_note, width=250, height=150, bg='#373435', borderwidth=0)
         my_note.add(tb2, text='Gerenciar Ferramentas')
 
-        tb4 = Frame(my_note, bg='#373435', width=250, height=150)
+        tb4 = Frame(my_note, bg='#373435', width=250, height=150, borderwidth=0)
         my_note.add(tb4, text='Gerenciar Tecnicos')
 
-
-
-
-        tb5 = Frame(my_note, bg='silver', width=250, height=150)
+        tb5 = Frame(my_note, bg='#373435', width=250, height=150, borderwidth=0)
         my_note.add(tb5, text='Gerenciar Reservas')
 
 # ------------------TB4 GERENCIAR TECNICOS--------------------
@@ -453,6 +456,7 @@ class Jan_Cf(tk.Tk):
         lbnome_tb4 = Label(tb4, text='NOME', anchor=W, fg='white', bg='#373435')
         vnome = Entry(tb4, textvariable=v3)
         vnome.bind("<KeyRelease>", caps3)
+
         def caps4(event):
             v4.set(v4.get().upper())
             if len(v4.get()) > 30:
@@ -556,27 +560,42 @@ class Jan_Cf(tk.Tk):
         vdesc = Entry(tb2, textvariable=v)
         vdesc.bind("<KeyRelease>", caps)
 
-
         lbpn_tb2 = Label(tb2, text='PART NUMBER', anchor=W, fg='white', bg='#373435')
         vpn = Entry(tb2)
 
  # ------------------Adicionando Widgets a aba tb5 (botes, labels, etc)--------------------
 
-        lbidfer_tb5 = Label(tb5, text='ID Ferramenta', anchor=W)
+        lbidfer_tb5 = Label(tb5, text='ID Ferramenta',anchor=W, fg='white', bg='#373435')
         vidfer = Entry(tb5)
         vidres = Entry(tb5)
         vstatus = Entry(tb5)
-        lbdesc_tb5 = Label(tb5, text='DESCRIÇÃO da solicitação', anchor=W)
+        lbdesc_tb5 = Label(tb5, text='DESCRIÇÃO da solicitação', anchor=W, fg='white', bg='#373435')
         vdescres = Entry(tb5)
-        lbdtret_tb5 = Label(tb5, text='DATA RETIRADA', anchor=W)
-        vdtret = Entry(tb5)
-        lbhrret_tb5 = Label(tb5, text='HORA RETIRADA', anchor=W)
+
+        lbdtret_tb5 = Label(tb5, text='DATA RETIRADA', anchor=W, fg='white', bg='#373435')
+        vdtret = DateEntry(tb5)
+
+        # Spinbox
+        #current_value = tk.StringVar(value=0)
+        #vhrret = ttk.Spinbox(
+            #tb5,
+            #from_=0,
+            #to=24,
+            #textvariable=current_value,
+            #wrap=True)
+
+        #spin_box.place(x=600, y=300, width=40)
+
+        lbhrret_tb5 = Label(tb5, text='HORA RETIRADA', anchor=W, fg='white', bg='#373435')
         vhrret = Entry(tb5)
-        lbdtdev_tb5 = Label(tb5, text='DATA DEVOLUÇAO', anchor=W)
-        vdtdev = Entry(tb5)
-        lbhrdev_tb5 = Label(tb5, text='HORA DEVOLUÇÃO', anchor=W)
+
+        lbdtdev_tb5 = Label(tb5, text='DATA DEVOLUÇAO', anchor=W, fg='white', bg='#373435')
+        vdtdev = DateEntry(tb5)
+
+        lbhrdev_tb5 = Label(tb5, text='HORA DEVOLUÇÃO', anchor=W, fg='white', bg='#373435')
         vhrdev = Entry(tb5)
-        lbnmtec_tb5 = Label(tb5, text='NOME', anchor=W)
+
+        lbnmtec_tb5 = Label(tb5, text='NOME', anchor=W, fg='white', bg='#373435')
         vnmtec = Entry(tb5)
 
         # -BOTÃO FUNÇÃO ADICIONAR/RESERVAR--------------------------
@@ -602,6 +621,7 @@ class Jan_Cf(tk.Tk):
         btn_down_tb2 = Button(tb2, text='Download', command=download2)
 
         btn_down_tb5 = Button(tb5, text='Download', command=download3)
+
 
         #--------------------------------DEVOLUÇÃO---------------------------------------
 
@@ -689,10 +709,10 @@ class Jan_Cf(tk.Tk):
         treeRes = ttk.Treeview(tb5, columns=dadosColunas3, show='headings')
 
         # Adding a scrollbar to Treeview widget
-        ytreeScroll = ttk.Scrollbar(tb5)
+        ytreeScroll = ttk.Scrollbar(treeRes)
         ytreeScroll.configure(command=treeRes.yview)
 
-        xtreeScroll = ttk.Scrollbar(tb5, orient='horizontal')
+        xtreeScroll = ttk.Scrollbar(treeRes, orient='horizontal')
         xtreeScroll.configure(command=treeRes.xview)
 
         treeRes.configure(yscrollcommand=ytreeScroll.set, xscrollcommand=xtreeScroll.set)
@@ -708,7 +728,7 @@ class Jan_Cf(tk.Tk):
             if n3[8] == 'PENDENTE':
                 treeRes.insert('', tk.END, values=list(n3))
 
-        treeRes.place(x=4, y=100, width=1000, height=200)
+        treeRes.place(x=1, y=1, width=width_value -5, height=290)
 
         # ---------------------------------------------------------
 
@@ -770,20 +790,27 @@ class Jan_Cf(tk.Tk):
         btn_devol_tb5.place(x=100, y=300, width=80, height=20)
         btn_adicionar_tb5.place(x=10, y=300, width=80, height=20)
         btn_down_tb5.place(x=190, y=300, width=80, height=20)
-        lbidfer_tb5.place(x=10, y=10, width=80, height=20)
-        vidfer.place(x=10, y=30, width=80, height=20)
-        lbdesc_tb5.place(x=100, y=10, width=80, height=20)
-        vdescres.place(x=100, y=30, width=80, height=20)
-        lbdtret_tb5.place(x=190, y=10, width=70, height=20)
-        vdtret.place(x=190, y=30, width=70, height=20)
-        lbhrret_tb5.place(x=270, y=10, width=70, height=20)
-        vhrret.place(x=270, y=30, width=70, height=20)
-        lbdtdev_tb5.place(x=350, y=10, width=70, height=20)
-        vdtdev.place(x=350, y=30, width=70, height=20)
-        lbhrdev_tb5.place(x=430, y=10, width=70, height=20)
-        vhrdev.place(x=430, y=30, width=70, height=20)
-        lbnmtec_tb5.place(x=510, y=10, width=70, height=20)
-        vnmtec.place(x=510, y=30, width=70, height=20)
+
+        lbidfer_tb5.place(x=10, y=330, width=80, height=20)
+        vidfer.place(x=100, y=330, width=80, height=20)
+
+        lbdesc_tb5.place(x=10, y=360, width=150, height=20)
+        vdescres.place(x=170, y=360, width=300, height=20)
+
+        lbdtret_tb5.place(x=10, y=390, width=100, height=20)
+        vdtret.place(x=120, y=390, width=80, height=20)
+
+        lbhrret_tb5.place(x=10, y=420, width=100, height=20)
+        vhrret.place(x=120, y=420, width=80, height=20)
+
+        lbdtdev_tb5.place(x=10, y=450, width=110, height=20)
+        vdtdev.place(x=130, y=450, width=80, height=20)
+
+        lbhrdev_tb5.place(x=10, y=480, width=110, height=20)
+        vhrdev.place(x=130, y=480, width=80, height=20)
+        
+        lbnmtec_tb5.place(x=10, y=510, width=100, height=20)
+        vnmtec.place(x=120, y=510, width=80, height=20)
 
 if __name__ == "__main__":
     root = App()
