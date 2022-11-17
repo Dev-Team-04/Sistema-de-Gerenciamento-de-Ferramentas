@@ -260,6 +260,10 @@ class Jan_Cf(tk.Tk):
                 return 'cpf vazio'
             if len(fone) == 0 and len(radio) == 0:
                 return 'Celular e radios vazios'
+            if len(fone) != 0 and len(fone) != 9:
+                return 'Celular deve conter 9 digitos'
+            if len(radio) != 0 and len(radio) > 8:
+                return 'Radio deve conter até 8 digitos'
             else:
                 try:
                     if any(ch.isdigit() for ch in name):
