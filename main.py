@@ -11,6 +11,8 @@ senha_adm = 'devteam4'
 
 tabela_ferramentas = pd.read_csv(r'lista_ferramentas.csv', sep=';', index_col=0, encoding='UTF-8')
 tabela_funcionarios = pd.read_csv(r'lista_funcionarios.csv', sep=',', index_col=0, encoding='UTF-8')
+# tabela_funcionarios = tabela_funcionarios.astype(str)
+# print(type(tabela_funcionarios['CELULAR'][0]))
 tabela_reservas = pd.read_csv(r'lista_reservas.csv', sep=';', index_col=0, encoding='UTF-8')
 
 #TELA DE LOGIN
@@ -142,7 +144,7 @@ class Jan_Cf(tk.Tk):
                         return 'descricao deve ter até 60'
                     if len(fabricante) > 30:
                         return 'fabricante deve ter até 30 caracteres'
-                    if len(voltagem) > 15: # Podem ser as opções para escolher uma (manha, tarde, noite)
+                    if len(voltagem) > 15:
                         return 'voltagem deve ter até 15 caracteres'
                     if len(pnumber) > 25:
                         return 'pnumber deve ter até 25 caracteres'
@@ -152,7 +154,6 @@ class Jan_Cf(tk.Tk):
                         return 'Unidade de medida deve ter até 15 caracteres'
                     if len(tipofer) >15:
                         return 'tipofer deve ter até 15 caracteres'
-                    # TEM QUE INSERIR AQUI A FUNÇÃO DE VALIDAR DIGITOS VERIFICADORES DO CPF
                     if len(matfer) >15 :
                         return 'matfer deve ter até 15 caracteres'
                     else:
@@ -320,7 +321,7 @@ class Jan_Cf(tk.Tk):
                 # print(tabela_funcionarios)
                 tabela_funcionarios.to_csv(r'lista_funcionarios.csv')
                 vnome.delete(0, END),
-                vturno.delete(0, END),
+                #vturno.delete(0, END),
                 vequipe.delete(0, END),
                 vcpf.delete(0, END),
                 vfone.delete(0, END),
@@ -461,6 +462,7 @@ class Jan_Cf(tk.Tk):
         vturno = ttk.Combobox(tb4, width=27)
         vturno['values'] = ("MANHÃ",
                           "TARDE", "NOITE")
+        vturno.set('Selecione')
         vturno.current()
 
         lbradio_tb4 = Label(tb4, text='RADIO', anchor=W, fg='white', bg='#373435')
@@ -499,8 +501,14 @@ class Jan_Cf(tk.Tk):
         # Adição de itens no Combobox
         vvolt['values'] = ("127V",
                           "220V",
-                           'BIVOLT')
+                           'BIVOLT',
+                           'NÃO SE APLICA')
+        vvolt.set('Selecione')
         vvolt.current()
+
+
+        # if (vvolt.get() !='127V') or (voltagem !='220V') or (voltagem !='BIVOLT') or (voltagem !='NÃO SE APLICA'):
+        #      return 'VALOR DIFERENTE DO ESPERADO'
 
 
         # Componente Combobox
@@ -509,6 +517,7 @@ class Jan_Cf(tk.Tk):
         # Adição de itens no Combobox
         vuni['values'] = ("CM",
                            "POLEGADA", "METROS")
+        vuni.set('Selecione')
         vuni.current()
 
         # Componente Combobox
@@ -517,14 +526,16 @@ class Jan_Cf(tk.Tk):
         #Adição de itens no Combobox
         vmat['values'] = ("PLASTICO",
                           "AÇO", "MADEIRA","VIDRO")
+        vmat.set('Selecione')
         vmat.current()
 
         # Componente Combobox
         lbtipo = Label(tb2, text='TIPO', anchor=W, fg='white', bg='#373435')
         vtipo = ttk.Combobox(tb2, width=27)  # , textvariable=n
         #Adição de itens no Combobox
-        vtipo['values'] = ("ELTRICO",
-                          "MECANICA", "SEGURANÇA")
+        vtipo['values'] = ("ELÉTRICO",
+                          "MECÂNICA", "SEGURANÇA")
+        vtipo.set('Selecione')
         vtipo.current()
 
         lbtam_tb2 = Label(tb2, text='TAMANHO', anchor=W, fg='white', bg='#373435')
@@ -613,7 +624,7 @@ class Jan_Cf(tk.Tk):
         ytreeScroll2 = ttk.Scrollbar(treeTec)
         ytreeScroll2.configure(command=treeTec.yview)
 
-        xtreeScroll2 = ttk.Scrollbar( treeTec, orient='horizontal')
+        xtreeScroll2 = ttk.Scrollbar(treeTec, orient='horizontal')
         xtreeScroll2.configure(command=treeTec.xview)
 
         treeTec.configure(yscrollcommand=ytreeScroll2.set, xscrollcommand=xtreeScroll2.set)
@@ -625,6 +636,12 @@ class Jan_Cf(tk.Tk):
             treeTec.heading(f"{i}", text=f"{i}")
 
         for n in tabela_funcionarios.values:
+            n[4] = '%.0f' % n[4]
+            n[5] = '%.0f' % n[5]
+            if n[4] == 'nan':
+                n[4] = 'N/A'
+            if n[5] == 'nan':
+                n[5] = 'N/A'
             treeTec.insert('', tk.END, values=list(n))
 
         treeTec.place(x=1, y=1, width=width_value -5, height=290)
@@ -696,8 +713,8 @@ class Jan_Cf(tk.Tk):
         # lbid_tb2.place(x=10, y=10, width=80, height=20)
         # vid.place(x=10, y=30, width=80, height=20)
 
-        lbpn_tb2.place(x=10, y=540, width=90, height=20)
-        vpn.place(x=100, y=540, width=90, height=20)
+        lbpn_tb2.place(x=10, y=390, width=90, height=20)
+        vpn.place(x=100, y=390, width=150, height=20)
 
         lbdesc_tb2.place(x=10, y=330, width=100, height=20)
         vdesc.place(x=100, y=330, width=500, height=20)
@@ -705,8 +722,8 @@ class Jan_Cf(tk.Tk):
         lbfab.place(x=10, y=360, width=100, height=20)
         vfab.place(x=100, y=360, width=250, height=20)
 
-        lbvolt.place(x=10, y=390, width=100, height=20)
-        vvolt.place(x=100, y=390, width=90, height=20)
+        lbvolt.place(x=10, y=540, width=100, height=20)
+        vvolt.place(x=100, y=540, width=100, height=20)
 
         lbtam_tb2.place(x=10, y=420, width=70, height=20)
         vtam.place(x=100, y=420, width=90, height=20)
