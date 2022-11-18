@@ -388,47 +388,61 @@ class Jan_Cf(tk.Tk):
                 messagebox.showinfo(title='erro', message='Selecione o elemento a ser atualizado')
             else:
                 index = treeRes.index(treeRes.selection()[0])
+
                 # Grab the record number
                 selected = treeRes.focus()
+
                 # Grab record values
-                #values = treeRes.item(selected, 'values')
+                values = treeRes.item(selected, 'values')
                 # (selected)
-                id_reserva = treeRes.item(selected)['values'][0]
-                print(id_reserva)
+                #id_reserva = treeRes.item(selected)['values'][0]
+                #print(id_reserva)
+
+                vidres.delete(0,END)
+                vidfer.delete(0, END),
+                vdescres.delete(0, END),
+                vdtret.delete(0, END),
+                vhrret.delete(0, END),
+                vdtdev.delete(0, END),
+                vhrdev.delete(0, END),
+                vnmtec.delete(0, END),
+                vidfer.focus()
+
+
                 # outpus to entry boxes
-                #vidres.insert(0, values[0])
-                #vidfer.insert(0, values[1])
-                #vdescres.insert(0, values[2])
-                #vdtret.insert(0, values[3])
-                #vhrret.insert(0, values[4])
-                #vdtdev.insert(0, values[5])
-                #vhrdev.insert(0, values[6])
-                #vnmtec.insert(0, values[7])
-                #vstatus.insert(0, values[8])
+                vidres.insert(0, values[0])
+                vidfer.insert(0, values[1])
+                vdescres.insert(0, values[2])
+                vdtret.insert(0, values[3])
+                vhrret.insert(0, values[4])
+                vdtdev.insert(0, values[5])
+                vhrdev.insert(0, values[6])
+                vnmtec.insert(0, values[7])
+                vstatus.insert(0, values[8])
 
                 # Update record
-                #treeRes.item(selected, text="", values=(
-                #vidres.get(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(), vdtdev.get(),
-                #vhrdev.get(), vnmtec.get(), 'finalizado'))
-                #lista_add = [vidres.get(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(), vdtdev.get(),
-                #             vhrdev.get(), vnmtec.get(), 'finalizado']
+                treeRes.item(selected, text="", values=(
+                vidres.get(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(), vdtdev.get(),
+                vhrdev.get(), vnmtec.get(), 'finalizado'))
+                lista_add = [vidres.get(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(), vdtdev.get(),
+                             vhrdev.get(), vnmtec.get(), 'finalizado']
                 tabela_reservas = pd.read_csv('lista_reservas.csv', sep=';', index_col=0) 
                 #print(tabela_reservas.values[0])
-                #tabela_reservas = tabela_reservas.drop([index])
-                #tabela_reservas = tabela_reservas.reset_index()
-                #tabela_reservas = tabela_reservas.drop(['index'], axis=1)
+                tabela_reservas = tabela_reservas.drop([index])
+                tabela_reservas = tabela_reservas.reset_index()
+                tabela_reservas = tabela_reservas.drop(['index'], axis=1)
                 # print(tabela_ferramentas)
-                #tabela_reservas.loc[len(tabela_reservas)] = lista_add
+                tabela_reservas.loc[len(tabela_reservas)] = lista_add
                 #print(tabela_reservas)
-                #tabela_reservas.to_csv(r'lista_reservas.csv', sep=';')
-                #vidfer.delete(0, END),
-                #vdescres.delete(0, END),
-                #vdtret.delete(0, END),
-                #vhrret.delete(0, END),
-                #vdtdev.delete(0, END),
-                #vhrdev.delete(0, END),
-                #vnmtec.delete(0, END),
-                #vidfer.focus()
+                tabela_reservas.to_csv(r'lista_reservas.csv', sep=';')
+                vidfer.delete(0, END),
+                vdescres.delete(0, END),
+                vdtret.delete(0, END),
+                vhrret.delete(0, END),
+                vdtdev.delete(0, END),
+                vhrdev.delete(0, END),
+                vnmtec.delete(0, END),
+                vidfer.focus()
 
 # ----------FUNÇÃO --- DOWNLOAD ---- SOMENTE --- TB4 ---- FUNCIONARIOS
 
