@@ -339,82 +339,28 @@ class Jan_Cf(tk.Tk):
 
 
 # ----------------------------------RESERVAR TB5-----------------------------------------#
-
+        
         def reservar():
             lista_idfer = tabela_ferramentas['ID'].tolist()
-            print(lista_idfer)
-            lista_idres = tabela_reservas['Id ferramenta'].tolist()
-            print(lista_idres)
-            if int(vidfer.get()) not in lista_idfer:
-                messagebox.showinfo('erro', message='Id da ferramenta não localizado. Consulte a tabela'
-                                                    'de ferramentas para verificação')
+            if int(vidfer.get()) not in lista_idfer or len(vidfer.get())==0:
+                return messagebox.showinfo('erro', message='Id da ferramenta não localizado. Consulte a tabela de ferramentas para verificação')
+            if len(vdescres.get()) == 0 or len(vdescres.get()) <= 15:
+                return messagebox.showinfo('erro', message='Descrição não pode estar vazio e tem que ser maior que 15 caracteres')
+            if len(vdtret.get()) == 0:
+                return messagebox.showinfo('erro', message='Selecione a data de retirada')
+            if len(vhrret.get()) == 0  or vhrret.get()=='Selecione':
+                return messagebox.showinfo('erro', message='Selecione a hora de retirada')   
+            if len(vdtdev.get()) == 0:
+                return messagebox.showinfo('erro', message='Selecione a data de devolução')
+            if len(vhrdev.get()) == 0 or vhrdev.get()=='Selecione':
+                return messagebox.showinfo('erro', message='Selecione a hora da devolução')
+            if len(vnmtec.get()) == 0 or len(vnmtec.get()) <= 10:
+                return messagebox.showinfo('erro', message='Por favor insira o nome completo (MAIOR QUE 10 CARACTERES)')        
             else:
-                if int(vidfer.get()) in lista_idres:
-                    messagebox.showinfo('erro',
-                                        message='Ferramenta já reservada. Consulte a tabela de reservas para maiores informações')
-                else:
-                    treeRes.insert('', tk.END,
-                                   values=(gerar_idres(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(),vdtdev.get(),vhrdev.get(), vnmtec.get(), 'PENDENTE'))
-                    lista_add = [gerar_idres(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(), vdtdev.get(),
-                                 vhrdev.get(), vnmtec.get(), 'PENDENTE']
-                    # print(tabela_ferramentas)
-                    tabela_reservas.loc[len(tabela_reservas)] = lista_add
-                    print(tabela_reservas)
-                    tabela_reservas.to_csv(r'lista_reservas.csv', sep=';')
-                    vidfer.delete(0, END),
-                    vdescres.delete(0, END),
-                    vdtret.delete(0, END),
-                    vhrret.delete(0, END),
-                    vdtdev.delete(0, END),
-                    vhrdev.delete(0, END),
-                    vnmtec.delete(0, END),
-                    vidfer.focus()
-
-        def gerar_idres():
-            lista_ids_existentes = tabela_reservas['Id ferramenta'].tolist()
-            id = randint(1, 100000)
-            while id in lista_ids_existentes:
-                id = randint(1, 100000)
-            else:
-                return id
-
-# ----------------------------------DEVOLUÇÃO TB5-----------------------------------------#
-        def devolucao():
-            if not treeRes.selection():
-                messagebox.showinfo(title='erro', message='Selecione o elemento a ser atualizado')
-            else:
-                index = treeRes.index(treeRes.selection()[0])
-                # print(index)
-
-                # Grab the record number
-                selected = treeRes.focus()
-                # Grab record values
-                values = treeRes.item(selected, 'values')
-                # (selected)
-                # print(treeRes.item(selected)['values'][8])
-
-                # outpus to entry boxes
-                vidres.insert(0, values[0])
-                vidfer.insert(0, values[1])
-                vdescres.insert(0, values[2])
-                vdtret.insert(0, values[3])
-                vhrret.insert(0, values[4])
-                vdtdev.insert(0, values[5])
-                vhrdev.insert(0, values[6])
-                vnmtec.insert(0, values[7])
-                vstatus.insert(0, values[8])
-
-                # Update record
-                treeRes.item(selected, text="", values=(
-                vidres.get(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(), vdtdev.get(),
-                vhrdev.get(), vnmtec.get(), 'finalizado'))
-                lista_add = [vidres.get(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(), vdtdev.get(),
-                             vhrdev.get(), vnmtec.get(), 'finalizado']
-                tabela_reservas = pd.read_csv('lista_reservas.csv', sep=';', index_col=0)
-                tabela_reservas = tabela_reservas.drop([index])
-                tabela_reservas = tabela_reservas.reset_index()
-                tabela_reservas = tabela_reservas.drop(['index'], axis=1)
-                # print(tabela_ferramentas)
+                treeRes.insert('', tk.END,
+                                    values=(gerar_idres(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(),vdtdev.get(),vhrdev.get(), vnmtec.get(), 'PENDENTE'))
+                lista_add = [gerar_idres(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(), vdtdev.get(),
+                                    vhrdev.get(), vnmtec.get(), 'PENDENTE']
                 tabela_reservas.loc[len(tabela_reservas)] = lista_add
                 print(tabela_reservas)
                 tabela_reservas.to_csv(r'lista_reservas.csv', sep=';')
@@ -426,6 +372,63 @@ class Jan_Cf(tk.Tk):
                 vhrdev.delete(0, END),
                 vnmtec.delete(0, END),
                 vidfer.focus()
+
+        def gerar_idres():
+            lista_ids_existentes = tabela_reservas['Id ferramenta'].tolist()
+            id = randint(1, 100000)
+            while id in lista_ids_existentes:
+                id = randint(1, 100000)
+            else:
+                return id
+
+
+# ----------------------------------DEVOLUÇÃO TB5-----------------------------------------#
+        def devolucao():
+            if not treeRes.selection():
+                messagebox.showinfo(title='erro', message='Selecione o elemento a ser atualizado')
+            else:
+                index = treeRes.index(treeRes.selection()[0])
+                # Grab the record number
+                selected = treeRes.focus()
+                # Grab record values
+                #values = treeRes.item(selected, 'values')
+                # (selected)
+                id_reserva = treeRes.item(selected)['values'][0]
+                print(id_reserva)
+                # outpus to entry boxes
+                #vidres.insert(0, values[0])
+                #vidfer.insert(0, values[1])
+                #vdescres.insert(0, values[2])
+                #vdtret.insert(0, values[3])
+                #vhrret.insert(0, values[4])
+                #vdtdev.insert(0, values[5])
+                #vhrdev.insert(0, values[6])
+                #vnmtec.insert(0, values[7])
+                #vstatus.insert(0, values[8])
+
+                # Update record
+                #treeRes.item(selected, text="", values=(
+                #vidres.get(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(), vdtdev.get(),
+                #vhrdev.get(), vnmtec.get(), 'finalizado'))
+                #lista_add = [vidres.get(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(), vdtdev.get(),
+                #             vhrdev.get(), vnmtec.get(), 'finalizado']
+                tabela_reservas = pd.read_csv('lista_reservas.csv', sep=';', index_col=0) 
+                #print(tabela_reservas.values[0])
+                #tabela_reservas = tabela_reservas.drop([index])
+                #tabela_reservas = tabela_reservas.reset_index()
+                #tabela_reservas = tabela_reservas.drop(['index'], axis=1)
+                # print(tabela_ferramentas)
+                #tabela_reservas.loc[len(tabela_reservas)] = lista_add
+                #print(tabela_reservas)
+                #tabela_reservas.to_csv(r'lista_reservas.csv', sep=';')
+                #vidfer.delete(0, END),
+                #vdescres.delete(0, END),
+                #vdtret.delete(0, END),
+                #vhrret.delete(0, END),
+                #vdtdev.delete(0, END),
+                #vhrdev.delete(0, END),
+                #vnmtec.delete(0, END),
+                #vidfer.focus()
 
 # ----------FUNÇÃO --- DOWNLOAD ---- SOMENTE --- TB4 ---- FUNCIONARIOS
 
@@ -492,14 +495,6 @@ class Jan_Cf(tk.Tk):
         lbfab = Label(tb2, anchor=W, text="FABRICANTE", fg='white', bg='#373435')
         vfab = Entry(tb2, textvariable=v2)
         vfab.bind("<KeyRelease>", caps2)
-        # Componente Combobox
-        # n = tk.StringVar()
-        # vfab = ttk.Combobox(tb2, width=27)  # , textvariable=n
-        # # Adição de itens no Combobox
-        # vfab['values'] = ("SONY",
-        #                     "CANON",
-        #                     "DJI")
-        # vfab.current()
 
         # Componente Label
         lbvolt = Label(tb2, text="VOLTAGEM", fg='white', anchor=W, bg='#373435')
@@ -513,11 +508,6 @@ class Jan_Cf(tk.Tk):
                            'NÃO SE APLICA')
         vvolt.set('Selecione')
         vvolt.current()
-
-
-        # if (vvolt.get() !='127V') or (voltagem !='220V') or (voltagem !='BIVOLT') or (voltagem !='NÃO SE APLICA'):
-        #      return 'VALOR DIFERENTE DO ESPERADO'
-
 
         # Componente Combobox
         lbuni = Label(tb2, text="UNIDADE",anchor=W, fg='white', bg='#373435')
@@ -539,7 +529,7 @@ class Jan_Cf(tk.Tk):
 
         # Componente Combobox
         lbtipo = Label(tb2, text='TIPO', anchor=W, fg='white', bg='#373435')
-        vtipo = ttk.Combobox(tb2, width=27)  # , textvariable=n
+        vtipo = ttk.Combobox(tb2, width=27)  
         #Adição de itens no Combobox
         vtipo['values'] = ("ELÉTRICO",
                           "MECÂNICA", "SEGURANÇA")
@@ -575,27 +565,29 @@ class Jan_Cf(tk.Tk):
         lbdtret_tb5 = Label(tb5, text='DATA RETIRADA', anchor=W, fg='white', bg='#373435')
         vdtret = DateEntry(tb5)
 
-        # Spinbox
-        #current_value = tk.StringVar(value=0)
-        #vhrret = ttk.Spinbox(
-            #tb5,
-            #from_=0,
-            #to=24,
-            #textvariable=current_value,
-            #wrap=True)
-
-        #spin_box.place(x=600, y=300, width=40)
-
         lbhrret_tb5 = Label(tb5, text='HORA RETIRADA', anchor=W, fg='white', bg='#373435')
-        vhrret = Entry(tb5)
+        # Componente Combobox
+        vhrret = ttk.Combobox(tb5, width=27) 
+        #Adição de itens no Combobox
+        vhrret['values'] = ("00:00","01:00","02:00","03:00","04:00","05:00","06:00","07:00","08:00","09:00","10:00","11:00","12:00",
+        "13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00")
+        vhrret.set('Selecione')
+        vhrret.current()
 
         lbdtdev_tb5 = Label(tb5, text='DATA DEVOLUÇAO', anchor=W, fg='white', bg='#373435')
         vdtdev = DateEntry(tb5)
 
         lbhrdev_tb5 = Label(tb5, text='HORA DEVOLUÇÃO', anchor=W, fg='white', bg='#373435')
-        vhrdev = Entry(tb5)
+        #vhrdev = Entry(tb5)
+        # Componente Combobox
+        vhrdev = ttk.Combobox(tb5, width=27) 
+        #Adição de itens no Combobox
+        vhrdev['values'] = ("00:00","01:00","02:00","03:00","04:00","05:00","06:00","07:00","08:00","09:00","10:00","11:00","12:00",
+        "13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00")
+        vhrdev.set('Selecione')
+        vhrdev.current()
 
-        lbnmtec_tb5 = Label(tb5, text='NOME', anchor=W, fg='white', bg='#373435')
+        lbnmtec_tb5 = Label(tb5, text='TECNICO RESPONSAVEL', anchor=W, fg='white', bg='#373435')
         vnmtec = Entry(tb5)
 
         # -BOTÃO FUNÇÃO ADICIONAR/RESERVAR--------------------------
