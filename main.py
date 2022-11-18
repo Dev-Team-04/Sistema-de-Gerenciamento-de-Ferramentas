@@ -4,6 +4,30 @@ from tkinter import *
 from tkinter import ttk, messagebox, Event
 from random import randint
 from tkcalendar import *
+from datetime import datetime
+import pytz
+import win32print
+import win32api
+import os
+
+# escolher qual impressora a gente vai querer usar
+#lista_impressoras = win32print.EnumPrinters(2)
+#impressora = lista_impressoras[4]
+
+#win32print.SetDefaultPrinter(impressora[2])
+
+#caminho = r'C:\Users\Public\Downloads'
+#arquivo = r'lista_reservas.xlsx'
+
+#win32api.ShellExecute(0, "print", arquivo, None, caminho, 0)
+
+# mandar imprimir todos os arquivos de uma pasta
+#caminho = r"C:\Users\Public\Downloads"
+#lista_arquivos = os.listdir(caminho)
+
+# https://docs.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-shellexecutea
+#for arquivo in lista_arquivos:
+    #win32api.ShellExecute(0, "print", arquivo, None, caminho, 0)
 
 #-----------
 
@@ -58,7 +82,7 @@ class App(tk.Tk):
         #Encerrando a pagina de login
         self.destroy()
         Jan_Cf()
-
+        
     #FUNCION PARA USUARIO E SENHA
     # def abrir_jan_cf(self):
     #      if self.usuario.get() == 'devteam4' and self.senha.get() == 'devteam4':
@@ -304,6 +328,8 @@ class Jan_Cf(tk.Tk):
                     messagebox.showerror('Error', ep)
             # messagebox.showinfo('message', msg)
 
+#------------------- IMPRIMIR A LISTA DE RESERVAS ---------------
+
 
 
 # ----------FUNÇÃO --- DOWNLOAD ---- SOMENTE --- TB4 ---- FUNCIONARIOS
@@ -358,9 +384,10 @@ class Jan_Cf(tk.Tk):
                 return messagebox.showinfo('erro', message='Por favor insira o nome completo (MAIOR QUE 10 CARACTERES)')        
             else:
                 treeRes.insert('', tk.END,
-                                    values=(gerar_idres(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(),vdtdev.get(),vhrdev.get(), vnmtec.get(), 'PENDENTE'))
+                                    values=(gerar_idres(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(),
+                                    vdtdev.get(),vhrdev.get(), vnmtec.get(), 'PENDENTE', data_hora()))
                 lista_add = [gerar_idres(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(), vdtdev.get(),
-                                    vhrdev.get(), vnmtec.get(), 'PENDENTE']
+                                    vhrdev.get(), vnmtec.get(), 'PENDENTE', data_hora()]
                 tabela_reservas.loc[len(tabela_reservas)] = lista_add
                 print(tabela_reservas)
                 tabela_reservas.to_csv(r'lista_reservas.csv', sep=';')
@@ -381,7 +408,11 @@ class Jan_Cf(tk.Tk):
             else:
                 return id
 
-
+        def data_hora():
+            current_dateTime = datetime.now(pytz.timezone('America/Recife'))
+            current_dateTime = current_dateTime.strftime('%d/%m/%Y %H:%M')
+            return current_dateTime
+            
 # ----------------------------------DEVOLUÇÃO TB5-----------------------------------------#
         def devolucao():
             if not treeRes.selection():
@@ -394,6 +425,7 @@ class Jan_Cf(tk.Tk):
 
                 # Grab record values
                 values = treeRes.item(selected, 'values')
+                vdthrres = values[9]
                 # (selected)
                 #id_reserva = treeRes.item(selected)['values'][0]
                 #print(id_reserva)
@@ -406,7 +438,7 @@ class Jan_Cf(tk.Tk):
                 vdtdev.delete(0, END),
                 vhrdev.delete(0, END),
                 vnmtec.delete(0, END),
-                vidfer.focus()
+                #vdthrres.delete(0, END)
 
 
                 # outpus to entry boxes
@@ -419,13 +451,14 @@ class Jan_Cf(tk.Tk):
                 vhrdev.insert(0, values[6])
                 vnmtec.insert(0, values[7])
                 vstatus.insert(0, values[8])
+                #vdthrres.insert(0, values[9])
 
                 # Update record
                 treeRes.item(selected, text="", values=(
                 vidres.get(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(), vdtdev.get(),
-                vhrdev.get(), vnmtec.get(), 'finalizado'))
+                vhrdev.get(), vnmtec.get(), 'finalizado', vdthrres))
                 lista_add = [vidres.get(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(), vdtdev.get(),
-                             vhrdev.get(), vnmtec.get(), 'finalizado']
+                             vhrdev.get(), vnmtec.get(), 'finalizado', vdthrres]
                 tabela_reservas = pd.read_csv('lista_reservas.csv', sep=';', index_col=0) 
                 #print(tabela_reservas.values[0])
                 tabela_reservas = tabela_reservas.drop([index])
@@ -499,6 +532,18 @@ class Jan_Cf(tk.Tk):
 
 # ------------------ TB2 GERENCIAR FERRAMENTAS --------------------
 
+        # Componente Combobox
+        lbtmr = Label(tb2, text="Tempo max res",anchor=W, fg='white', bg='#373435')
+        vtmr = ttk.Combobox(tb2, width=27)
+        # Adição de itens no Combobox
+        vtmr['values'] = ("06:00","12:00","18:00","24:00","30:00","36:00","42:00",
+        "48:00")
+        vtmr.set('Selecione')
+        vtmr.current()
+
+        lbhoras = Label(tb2, text="Horas",anchor=W, fg='white', bg='#373435')
+
+
         # Componente Label
         def caps2(event):
             v2.set(v2.get().upper())
@@ -568,6 +613,7 @@ class Jan_Cf(tk.Tk):
         vpn = Entry(tb2)
 
  # ------------------Adicionando Widgets a aba tb5 (botes, labels, etc)--------------------
+
 
         lbidfer_tb5 = Label(tb5, text='ID Ferramenta',anchor=W, fg='white', bg='#373435')
         vidfer = Entry(tb5)
@@ -752,9 +798,6 @@ class Jan_Cf(tk.Tk):
         lbfab.place(x=10, y=360, width=100, height=20)
         vfab.place(x=100, y=360, width=250, height=20)
 
-        lbvolt.place(x=10, y=540, width=100, height=20)
-        vvolt.place(x=100, y=540, width=100, height=20)
-
         lbtam_tb2.place(x=10, y=420, width=70, height=20)
         vtam.place(x=100, y=420, width=90, height=20)
 
@@ -766,6 +809,13 @@ class Jan_Cf(tk.Tk):
 
         lbmat.place(x=10, y=510, width=70, height=20)
         vmat.place(x=100, y=510, width=90, height=20)
+ 
+        lbvolt.place(x=10, y=540, width=100, height=20)
+        vvolt.place(x=100, y=540, width=100, height=20)
+
+        lbtmr.place(x=10, y=570, width=70, height=20)
+        vtmr.place(x=100, y=570, width=90, height=20)
+        lbhoras.place(x=200, y=570, width=90, height=20) 
 
         btn_adicionar_tb2.place(x=10, y=300, width=80, height=20)
         btn_excluir_tb2.place(x=100, y=300, width=80, height=20)
