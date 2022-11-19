@@ -181,6 +181,7 @@ class Jan_Cf(tk.Tk):
                     messagebox.showerror('Error', ep)
 
         def download():
+            tabela_funcionarios = pd.read_csv(r'lista_funcionarios.csv', sep=',', index_col=0)
             tabela_funcionarios.to_excel(r'C:\Users\Public\Downloads\tabela_tecnicos.xlsx')
             messagebox.showinfo(
                 message='Download realizado com sucesso. Documento salvo em ' + r'C:\Users\Public\Downloads')            
