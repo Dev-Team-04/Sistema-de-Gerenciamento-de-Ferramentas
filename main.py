@@ -6,15 +6,18 @@ from random import randint
 from tkcalendar import *
 from datetime import datetime
 import pytz
-# -----------
+import os
+import time
+import openpyxl
+
+
+# --------------------------------------------------------------
 
 nome_adm = 'devteam4'
 senha_adm = 'devteam4'
 
 tabela_ferramentas = pd.read_csv(r'lista_ferramentas.csv', sep=';', index_col=0, encoding='UTF-8')
 tabela_funcionarios = pd.read_csv(r'lista_funcionarios.csv', sep=',', index_col=0, encoding='UTF-8')
-# tabela_funcionarios = tabela_funcionarios.astype(str)
-# print(type(tabela_funcionarios['CELULAR'][0]))
 tabela_reservas = pd.read_csv(r'lista_reservas.csv', sep=';', index_col=0, encoding='UTF-8')
 
 
@@ -451,6 +454,20 @@ class Jan_Cf(tk.Tk):
                 vhrdev.delete(0, END),
                 vnmtec.delete(0, END),
                 vidfer.focus()
+        
+        #def imprimir():
+            #pass
+            #lista_impressoras = win32print.EnumPrinters(2)
+           # impressora = lista_impressoras[0]
+            #print(impressora)
+
+            #win32print.SetDefaultPrinter(impressora[2])
+
+            #caminho = r"C:\Users\grego\Documents\GitHub\Sistema-de-Gerenciamento-de-Ferramentas-main"
+
+            #arquivo = r'lista_reservas.csv'
+
+            #win32api.ShellExecute(0, "print", arquivo, None, caminho, 0)
 
         # ----------FUNÇÃO --- DOWNLOAD ---- SOMENTE --- TB4 ---- FUNCIONARIOS
 
@@ -458,6 +475,58 @@ class Jan_Cf(tk.Tk):
             tabela_reservas.to_excel(r'C:\Users\Public\Downloads\lista_reservas.xlsx')
             messagebox.showinfo(
                 message='Download realizado com sucesso. Documento salvo em ' + r'C:\Users\Public\Downloads')
+        
+        def imprimir():
+            df = pd.read_csv(r'lista_reservas.csv', sep=';', index_col=0, encoding='UTF-8')
+            df2 = df[['ID RESERVA','ID FERRAMENTA','NOME TÉCNICO','DATA DEVOLUÇÃO',
+                        'HORA DEVOLUÇÃO','DT E HR RESERVA']]
+            df2.to_excel(r'C:\Users\Public\Downloads\tabela_reservas.xlsx')
+
+            # Call a Workbook() function of openpyxl 
+            # to create a new blank Workbook object
+            wb_obj = openpyxl.load_workbook(r"C:\Users\Public\Downloads\tabela_reservas.xlsx")
+
+            # Get workbook active sheet  
+            # from the active attribute. 
+            sheet_obj = wb_obj.active 
+
+            # set the width of the column 
+            sheet_obj.column_dimensions['A'].width = 2
+            sheet_obj.column_dimensions['B'].width = 12
+            sheet_obj.column_dimensions['C'].width = 15
+            sheet_obj.column_dimensions['D'].width = 17
+            sheet_obj.column_dimensions['E'].width = 17
+            sheet_obj.column_dimensions['F'].width = 17
+            sheet_obj.column_dimensions['G'].width = 17
+
+            sheet_obj.page_setup.orientation = sheet_obj.ORIENTATION_LANDSCAPE
+
+            wb_obj.save(r"C:\Users\Public\Downloads\tabela_reservas.xlsx",)    
+            
+
+            # Insert the directory path in here
+            path = r'C:\Users\Public\Downloads'
+            
+            # Extracting all the contents in the directory corresponding to path
+            l_files = os.listdir(path)
+            file = 'tabela_reservas.xlsx'
+            file_path = f'{path}\\{file}'
+            # Checking whether the given file is a directory or not
+            if os.path.isfile(file_path):
+                try:
+                    # Printing the file pertaining to file_path
+                    os.startfile(file_path, 'print')
+                    print(f'Imprimindo {file}')
+            
+                    # Sleeping the program for 5 seconds so as to account the
+                    #steady processing of the print operation.
+                    time.sleep(30)
+                except:
+                    #Catching if any error occurs and alerting the user
+                    print(f'ALERTA: {file} NÃO PODE SER IMPRESSA! POR FAVOR\
+                    VERIFIQUE O TIPO DO ARQUIVO.')
+            else:
+                print(f'ALERTA: {file} NÃO É UM ARQUIVO E NÃO PODE SER IMPRESSO!')
 
         # -------------------------------------------------------------------------------------------------------#
 
@@ -649,6 +718,7 @@ class Jan_Cf(tk.Tk):
         vnmtec['values'] = listaNomes
         vnmtec.set('Selecione')
         vnmtec.current()
+        
 
         # -BOTÃO FUNÇÃO ADICIONAR/RESERVAR--------------------------
 
@@ -658,6 +728,8 @@ class Jan_Cf(tk.Tk):
 
         btn_adicionar_tb5 = Button(tb5, text='Reservar', command=reservar)
 
+        btn_imp_tb5 = Button(tb5, text='Imprimir', command=imprimir)
+        
         # -----------------------------------------------------------------------------------
 
         # ------------BOTÃO FUNÇÃO DELETAR-----------------------
@@ -859,6 +931,7 @@ class Jan_Cf(tk.Tk):
         btn_devol_tb5.place(x=100, y=300, width=80, height=20)
         btn_adicionar_tb5.place(x=10, y=300, width=80, height=20)
         btn_down_tb5.place(x=190, y=300, width=80, height=20)
+        btn_imp_tb5.place(x=280, y=300, width=80, height=20)
 
         lbidfer_tb5.place(x=10, y=330, width=100, height=20)
         vidfer.place(x=130, y=330, width=80, height=20)
