@@ -60,7 +60,7 @@ class App(tk.Tk):
         else:
             messagebox.showinfo(message='Digite sua senha.')
 
-# FUNÇÃO PARA USUARIO E SENHA
+# FUNÇÃO PARA VERIFICAR USUARIO E SENHA
     def abrir_jan_cf(self):
         if self.usuario.get() == 'devteam4' and self.senha.get() == 'devteam4':
             self.destroy()
