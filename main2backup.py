@@ -6,29 +6,6 @@ from random import randint
 from tkcalendar import *
 from datetime import datetime
 import pytz
-# import win32print
-# import win32api
-# import os
-
-# escolher qual impressora a gente vai querer usar
-# lista_impressoras = win32print.EnumPrinters(2)
-# impressora = lista_impressoras[4]
-
-# win32print.SetDefaultPrinter(impressora[2])
-
-# caminho = r'C:\Users\Public\Downloads'
-# arquivo = r'lista_reservas.xlsx'
-
-# win32api.ShellExecute(0, "print", arquivo, None, caminho, 0)
-
-# mandar imprimir todos os arquivos de uma pasta
-# caminho = r"C:\Users\Public\Downloads"
-# lista_arquivos = os.listdir(caminho)
-
-# https://docs.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-shellexecutea
-# for arquivo in lista_arquivos:
-# win32api.ShellExecute(0, "print", arquivo, None, caminho, 0)
-
 # -----------
 
 nome_adm = 'devteam4'
@@ -83,7 +60,7 @@ class App(tk.Tk):
         self.destroy()
         Jan_Cf()
 
-    # FUNCION PARA USUARIO E SENHA
+    # FUNCTION PARA USUARIO E SENHA
     # def abrir_jan_cf(self):
     #      if self.usuario.get() == 'devteam4' and self.senha.get() == 'devteam4':
     #         Jan_Cf()
@@ -105,7 +82,7 @@ class Jan_Cf(tk.Tk):
         my_note = ttk.Notebook(self)
         my_note.place(x=0, y=0, width=width_value, height=height_value)
 
-        # ------ FUNÇÃO --- DELETAR----SOMENTE --- TB4 -------- FUNCIONARIOS
+        #FUNÇÃO DELETAR JANELA TÉCNICOS
 
         def del_tvbd():
             if not treeTec.selection():
@@ -113,30 +90,24 @@ class Jan_Cf(tk.Tk):
             else:
                 index = treeTec.index(treeTec.selection()[0])
                 treeTec.delete(treeTec.selection()[0])
-                # print(tabela_funcionarios)
                 tabela_funcionarios = pd.read_csv(r'lista_funcionarios.csv', sep=',', index_col=0)
                 tabela_funcionarios = tabela_funcionarios.drop([index])
                 tabela_funcionarios = tabela_funcionarios.reset_index()
-                # print(tabela_funcionarios)
                 tabela_funcionarios = tabela_funcionarios.drop(['index'], axis=1)
                 tabela_funcionarios.to_csv(r'lista_funcionarios.csv')
 
-        # ------ FUNCTION DELETAR ABA GERENCIAR FERRAMENTAS "TB2
+        #FUNÇÃO DELETAR JANELA GERENCIAR FERRAMENTAS
 
         def del_tvbd2():
             if not treeFer.selection():
                 messagebox.showinfo(title='Atenção!', message='SELECIONE O ELEMENTO A SER DELETADO.')
             else:
                 index = treeFer.index(treeFer.selection()[0])
-                # print(index)
                 treeFer.delete(treeFer.selection()[0])
                 tabela_ferramentas = pd.read_csv(r'lista_ferramentas.csv', sep=';', index_col=0)
-                # print(tabela_ferramentas)
                 tabela_ferramentas = tabela_ferramentas.drop([index])
                 tabela_ferramentas = tabela_ferramentas.reset_index()
-                # print(tabela_ferramentas)
                 tabela_ferramentas = tabela_ferramentas.drop(['index'], axis=1)
-                # print(tabela_ferramentas)
                 tabela_ferramentas.to_csv(r'lista_ferramentas.csv', sep=';')
 
         def val_fer():
@@ -148,6 +119,9 @@ class Jan_Cf(tk.Tk):
             unidade = vuni.get()
             tipofer = vtipo.get()
             matfer = vmat.get()
+            tmr = vtmr.get()
+            if len(tmr) == 0:
+                return 'TEMPO MÁXIMO DE RESERVA NÃO PODE ESTAR VAZIO!'
             if len(descricao) == 0:
                 return 'DESCRIÇÃO NÃO PODE ESTAR VAZIO!'
             if len(fabricante) == 0:
@@ -167,21 +141,21 @@ class Jan_Cf(tk.Tk):
             else:
                 try:
                     if len(descricao) > 60:  # elif len(name) <= 5 or len(name) >40: return 'O nome deve ser entre 05 a 40 caracteres'
-                        return 'descricao deve ter até 60'
+                        return 'LIMITE DE 60 CARACTERES!'
                     if len(fabricante) > 30:
-                        return 'fabricante deve ter até 30 caracteres'
+                        return 'LIMITE DE ATÉ 30 CARACTERES!'
                     if len(voltagem) > 15:
-                        return 'voltagem deve ter até 15 caracteres'
+                        return 'LIMITE DE 15 CARACTERES!'
                     if len(pnumber) > 25:
-                        return 'pnumber deve ter até 25 caracteres'
+                        return 'LIMITE DE 25 CARACTERES!'
                     if len(tamanho) > 20:
-                        return 'tamanho deve ter até 20 caracteres'
+                        return 'LIMITE DE 20 CARACTERES!'
                     if len(unidade) > 15:
-                        return 'Unidade de medida deve ter até 15 caracteres'
+                        return 'LIMITE DE 15 CARACTERES!'
                     if len(tipofer) > 15:
-                        return 'tipofer deve ter até 15 caracteres'
+                        return 'LIMITE DE 15 CARACTERES!'
                     if len(matfer) > 15:
-                        return 'matfer deve ter até 15 caracteres'
+                        return 'LIMITE DE 15 CARACTERES!'
                     else:
                         return 'Sucess!'
                 except Exception as ep:
@@ -198,9 +172,9 @@ class Jan_Cf(tk.Tk):
             else:
                 treeFer.insert('', tk.END,
                                values=(gerar_id(), v.get(), v2.get(), vvolt.get(), vtam.get(), vuni.get(),
-                                       vtipo.get(), vmat.get(), vpn.get()))
+                                       vtipo.get(), vmat.get(), vpn.get(),vtmr.get()))
                 lista_add = [gerar_id(), v.get(), v2.get(), vvolt.get(), vtam.get(), vuni.get(),
-                             vtipo.get(), vmat.get(), vpn.get()]
+                             vtipo.get(), vmat.get(), vpn.get(), vtmr.get()]
                 # print(Bd.tabela_ferramentas)
                 tabela_ferramentas.loc[len(tabela_ferramentas)] = lista_add
                 # print(Bd.tabela_ferramentas)
@@ -269,7 +243,6 @@ class Jan_Cf(tk.Tk):
             turno = vturno.get()
             equipe = vequipe.get()
             cpf = cpf_validate()
-            print(cpf)
             fone = vfone.get()
             radio = vradio.get()
             msg = ''
@@ -365,11 +338,11 @@ class Jan_Cf(tk.Tk):
         def reservar():
             lista_idfer = tabela_ferramentas['ID'].tolist()
             if int(vidfer.get()) not in lista_idfer or len(vidfer.get()) == 0:
-                return messagebox.showinfo('erro',
-                                           message='Id da ferramenta não localizado. Consulte a tabela de ferramentas para verificação')
+                return messagebox.showinfo('Atenção!',
+                                           message='REVISE O ID NA TABELA FERRAMENTAS!')
             if len(vdescres.get()) == 0 or len(vdescres.get()) <= 15:
                 return messagebox.showinfo('erro',
-                                           message='Descrição não pode estar vazio e tem que ser maior que 15 caracteres')
+                                           message='MINIMO 15 CARACTERES!')
             if len(vdtret.get()) == 0:
                 return messagebox.showinfo('erro', message='Selecione a data de retirada')
             if len(vhrret.get()) == 0 or vhrret.get() == 'Selecione':
@@ -387,7 +360,6 @@ class Jan_Cf(tk.Tk):
                 lista_add = [gerar_idres(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(), vdtdev.get(),
                              vhrdev.get(), vnmtec.get(), 'PENDENTE', data_hora()]
                 tabela_reservas.loc[len(tabela_reservas)] = lista_add
-                print(tabela_reservas)
                 tabela_reservas.to_csv(r'lista_reservas.csv', sep=';')
                 vidfer.delete(0, END),
                 vdescres.delete(0, END),
@@ -399,7 +371,7 @@ class Jan_Cf(tk.Tk):
                 vidfer.focus()
 
         def gerar_idres():
-            lista_ids_existentes = tabela_reservas['Id ferramenta'].tolist()
+            lista_ids_existentes = tabela_reservas['ID FERRAMENTA'].tolist()
             id = randint(1, 100000)
             while id in lista_ids_existentes:
                 id = randint(1, 100000)
@@ -531,15 +503,14 @@ class Jan_Cf(tk.Tk):
         # ------------------ TB2 GERENCIAR FERRAMENTAS --------------------
 
         # Componente Combobox
-        lbtmr = Label(tb2, text="Tempo max res", anchor=W, fg='white', bg='#373435')
+        lbtmr = Label(tb2, text="TMR", anchor=W, fg='white', bg='#373435')
         vtmr = ttk.Combobox(tb2, width=27)
         # Adição de itens no Combobox
-        vtmr['values'] = ("06:00", "12:00", "18:00", "24:00", "30:00", "36:00", "42:00",
-                          "48:00")
+        vtmr['values'] = ("12:00", "24:00", "36:00","48:00","60:00", "72:00")
         vtmr.set('Selecione')
         vtmr.current()
 
-        lbhoras = Label(tb2, text="Horas", anchor=W, fg='white', bg='#373435')
+        lbhoras = Label(tb2, text="TEMPO MÁXIMO DE RESERVA.", anchor=W, fg='white', bg='#373435')
 
         # Componente Label
         def caps2(event):
@@ -612,16 +583,30 @@ class Jan_Cf(tk.Tk):
 
         # ------------------Adicionando Widgets a aba tb5 (botes, labels, etc)--------------------
 
-        lbidfer_tb5 = Label(tb5, text='ID Ferramenta', anchor=W, fg='white', bg='#373435')
+        def descriUp(event):
+            desc.set(desc.get().upper())
+
+        desc = StringVar()
+
+        lbdesc_tb5 = Label(tb5, text='DESCRIÇÃO', anchor=W, fg='white', bg='#373435')
+        vdescres = Entry(tb5, textvariable=desc)
+        vdescres.bind('<KeyRelease>', descriUp)
+
+
+        lbidfer_tb5 = Label(tb5, text='ID FERRAMENTA', anchor=W, fg='white', bg='#373435')
         vidfer = Entry(tb5)
+
+        # Componente Combobox
+        vidfer = ttk.Combobox(tb5)
+        listaId = [item for item in tabela_ferramentas['ID']]
+        # Adição de itens no Combobox
+        vidfer['values'] = listaId
+        vidfer.set('Selecione')
+        vidfer.current()
         vidres = Entry(tb5)
         vstatus = Entry(tb5)
-        lbdesc_tb5 = Label(tb5, text='DESCRIÇÃO da solicitação', anchor=W, fg='white', bg='#373435')
-        vdescres = Entry(tb5)
-
         lbdtret_tb5 = Label(tb5, text='DATA RETIRADA', anchor=W, fg='white', bg='#373435')
         vdtret = DateEntry(tb5)
-
         lbhrret_tb5 = Label(tb5, text='HORA RETIRADA', anchor=W, fg='white', bg='#373435')
         # Componente Combobox
         vhrret = ttk.Combobox(tb5, width=27)
@@ -648,8 +633,16 @@ class Jan_Cf(tk.Tk):
         vhrdev.set('Selecione')
         vhrdev.current()
 
-        lbnmtec_tb5 = Label(tb5, text='TECNICO RESPONSAVEL', anchor=W, fg='white', bg='#373435')
-        vnmtec = Entry(tb5)
+        lbnmtec_tb5 = Label(tb5, text='TÉCNICO', anchor=W, fg='white', bg='#373435')
+        # vnmtec = Entry(tb5)
+
+        # Componente Combobox
+        vnmtec = ttk.Combobox(tb5)
+        listaNomes = [item for item in tabela_funcionarios['NOME']]
+        # Adição de itens no Combobox
+        vnmtec['values'] = listaNomes
+        vnmtec.set('Selecione')
+        vnmtec.current()
 
         # -BOTÃO FUNÇÃO ADICIONAR/RESERVAR--------------------------
 
@@ -743,7 +736,16 @@ class Jan_Cf(tk.Tk):
         ytreeScroll.pack(side=RIGHT, fill=BOTH)
 
         for i2 in dadosColunas2:
-            treeFer.heading(f"{i2}", text=f"{i2}")
+
+            if i2 == 'ID':
+                treeFer.column(i2, width=70, minwidth=50, stretch=NO)
+                treeFer.heading(f"{i2}", text=f"{i2}")
+            elif i2 == 'DESCRIÇÃO':
+                treeFer.column(i2, width=420, minwidth=50, stretch=NO)
+                treeFer.heading(f"{i2}", text=f"{i2}")
+            else:
+                treeFer.column(i2, width=200, minwidth=50, stretch=NO)
+                treeFer.heading(f"{i2}", text=f"{i2}")
 
         for n2 in tabela_ferramentas.values:
             treeFer.insert('', tk.END, values=list(n2))
@@ -771,7 +773,14 @@ class Jan_Cf(tk.Tk):
         ytreeScroll.pack(side=RIGHT, fill=BOTH)
 
         for i3 in dadosColunas3:
-            treeRes.heading(f"{i3}", text=f"{i3}")
+            if 'ID' in i3:
+                treeRes.column(i3, width=100, minwidth=50, stretch=NO)
+                treeRes.heading(f"{i3}", text=f"{i3}")
+            elif i3 == 'DESCRIÇÃO':
+                treeRes.column(i3, width=400, minwidth=50, stretch=NO)
+                treeRes.heading(f"{i3}", text=f"{i3}")
+            else:
+                treeRes.heading(f"{i3}", text=f"{i3}")
 
         for n3 in tabela_reservas.values:
             # print(n3[8]) #Chegando a coluna status da tabela que e igual ao item 8 da lista n3.
@@ -813,7 +822,7 @@ class Jan_Cf(tk.Tk):
 
         lbtmr.place(x=10, y=570, width=70, height=20)
         vtmr.place(x=100, y=570, width=90, height=20)
-        lbhoras.place(x=200, y=570, width=90, height=20)
+        lbhoras.place(x=200, y=570, width=300, height=20)
 
         btn_adicionar_tb2.place(x=10, y=300, width=80, height=20)
         btn_excluir_tb2.place(x=100, y=300, width=80, height=20)
@@ -845,26 +854,26 @@ class Jan_Cf(tk.Tk):
         btn_adicionar_tb5.place(x=10, y=300, width=80, height=20)
         btn_down_tb5.place(x=190, y=300, width=80, height=20)
 
-        lbidfer_tb5.place(x=10, y=330, width=80, height=20)
-        vidfer.place(x=100, y=330, width=80, height=20)
+        lbidfer_tb5.place(x=10, y=330, width=100, height=20)
+        vidfer.place(x=130, y=330, width=80, height=20)
 
         lbdesc_tb5.place(x=10, y=360, width=150, height=20)
-        vdescres.place(x=170, y=360, width=300, height=20)
+        vdescres.place(x=130, y=360, width=300, height=20)
 
         lbdtret_tb5.place(x=10, y=390, width=100, height=20)
-        vdtret.place(x=120, y=390, width=80, height=20)
+        vdtret.place(x=130, y=390, width=80, height=20)
 
-        lbhrret_tb5.place(x=10, y=420, width=100, height=20)
-        vhrret.place(x=120, y=420, width=80, height=20)
+        lbhrret_tb5.place(x=220, y=390, width=100, height=20)
+        vhrret.place(x=340, y=390, width=90, height=20)
 
-        lbdtdev_tb5.place(x=10, y=450, width=110, height=20)
-        vdtdev.place(x=130, y=450, width=80, height=20)
+        lbdtdev_tb5.place(x=10, y=420, width=110, height=20)
+        vdtdev.place(x=130, y=420, width=80, height=20)
 
-        lbhrdev_tb5.place(x=10, y=480, width=110, height=20)
-        vhrdev.place(x=130, y=480, width=80, height=20)
+        lbhrdev_tb5.place(x=220, y=420, width=110, height=20)
+        vhrdev.place(x=340, y=420, width=90, height=20)
 
-        lbnmtec_tb5.place(x=10, y=510, width=100, height=20)
-        vnmtec.place(x=120, y=510, width=80, height=20)
+        lbnmtec_tb5.place(x=10, y=450, width=100, height=20)
+        vnmtec.place(x=130, y=450, width=200, height=20)
 
 
 if __name__ == "__main__":

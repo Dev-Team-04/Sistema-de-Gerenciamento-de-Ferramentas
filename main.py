@@ -6,15 +6,17 @@ from random import randint
 from tkcalendar import *
 from datetime import datetime
 import pytz
-# -----------
+import os
+import time
+import openpyxl
+
+# --------------------------------------------------------------
 
 nome_adm = 'devteam4'
 senha_adm = 'devteam4'
 
 tabela_ferramentas = pd.read_csv(r'lista_ferramentas.csv', sep=';', index_col=0, encoding='UTF-8')
 tabela_funcionarios = pd.read_csv(r'lista_funcionarios.csv', sep=',', index_col=0, encoding='UTF-8')
-# tabela_funcionarios = tabela_funcionarios.astype(str)
-# print(type(tabela_funcionarios['CELULAR'][0]))
 tabela_reservas = pd.read_csv(r'lista_reservas.csv', sep=';', index_col=0, encoding='UTF-8')
 
 
@@ -178,7 +180,7 @@ class Jan_Cf(tk.Tk):
             else:
                 treeFer.insert('', tk.END,
                                values=(gerar_id(), v.get(), v2.get(), vvolt.get(), vtam.get(), vuni.get(),
-                                       vtipo.get(), vmat.get(), vpn.get(),vtmr.get()))
+                                       vtipo.get(), vmat.get(), vpn.get(), vtmr.get()))
                 lista_add = [gerar_id(), v.get(), v2.get(), vvolt.get(), vtam.get(), vuni.get(),
                              vtipo.get(), vmat.get(), vpn.get(), vtmr.get()]
                 # print(Bd.tabela_ferramentas)
@@ -452,12 +454,65 @@ class Jan_Cf(tk.Tk):
                 vnmtec.delete(0, END),
                 vidfer.focus()
 
+
+
         # ----------FUNÇÃO --- DOWNLOAD ---- SOMENTE --- TB4 ---- FUNCIONARIOS
 
         def download3():
             tabela_reservas.to_excel(r'C:\Users\Public\Downloads\lista_reservas.xlsx')
             messagebox.showinfo(
                 message='Download realizado com sucesso. Documento salvo em ' + r'C:\Users\Public\Downloads')
+
+        def imprimir():
+            df = pd.read_csv(r'lista_reservas.csv', sep=';', index_col=0, encoding='UTF-8')
+            df2 = df[['ID RESERVA', 'ID FERRAMENTA', 'NOME TÉCNICO', 'DATA DEVOLUÇÃO',
+                      'HORA DEVOLUÇÃO', 'DT E HR RESERVA', 'STATUS']]
+            df2.to_excel(r'C:\Users\Public\Downloads\tabela_reservas.xlsx')
+
+            # Call a Workbook() function of openpyxl
+            # to create a new blank Workbook object
+            wb_obj = openpyxl.load_workbook(r"C:\Users\Public\Downloads\tabela_reservas.xlsx")
+
+            # Get workbook active sheet
+            # from the active attribute.
+            sheet_obj = wb_obj.active
+
+            # set the width of the column
+            sheet_obj.column_dimensions['A'].width = 2
+            sheet_obj.column_dimensions['B'].width = 12
+            sheet_obj.column_dimensions['C'].width = 15
+            sheet_obj.column_dimensions['D'].width = 17
+            sheet_obj.column_dimensions['E'].width = 17
+            sheet_obj.column_dimensions['F'].width = 17
+            sheet_obj.column_dimensions['G'].width = 17
+
+            sheet_obj.page_setup.orientation = sheet_obj.ORIENTATION_LANDSCAPE
+
+            wb_obj.save(r"C:\Users\Public\Downloads\tabela_reservas.xlsx", )
+
+            # Insert the directory path in here
+            path = r'C:\Users\Public\Downloads'
+
+            # Extracting all the contents in the directory corresponding to path
+            l_files = os.listdir(path)
+            file = 'tabela_reservas.xlsx'
+            file_path = f'{path}\\{file}'
+            # Checking whether the given file is a directory or not
+            if os.path.isfile(file_path):
+                try:
+                    # Printing the file pertaining to file_path
+                    os.startfile(file_path, 'print')
+                    print(f'Imprimindo {file}')
+
+                    # Sleeping the program for 5 seconds so as to account the
+                    # steady processing of the print operation.
+                    time.sleep(30)
+                except:
+                    # Catching if any error occurs and alerting the user
+                    print(f'ALERTA: {file} NÃO PODE SER IMPRESSA! POR FAVOR\
+                    VERIFIQUE O TIPO DO ARQUIVO.')
+            else:
+                print(f'ALERTA: {file} NÃO É UM ARQUIVO E NÃO PODE SER IMPRESSO!')
 
         # -------------------------------------------------------------------------------------------------------#
 
@@ -512,7 +567,7 @@ class Jan_Cf(tk.Tk):
         lbtmr = Label(tb2, text="TMR", anchor=W, fg='white', bg='#373435')
         vtmr = ttk.Combobox(tb2, width=27)
         # Adição de itens no Combobox
-        vtmr['values'] = ("12:00", "24:00", "36:00","48:00","60:00", "72:00")
+        vtmr['values'] = ("12:00", "24:00", "36:00", "48:00", "60:00", "72:00")
         vtmr.set('Selecione')
         vtmr.current()
 
@@ -598,7 +653,6 @@ class Jan_Cf(tk.Tk):
         vdescres = Entry(tb5, textvariable=desc)
         vdescres.bind('<KeyRelease>', descriUp)
 
-
         lbidfer_tb5 = Label(tb5, text='ID FERRAMENTA', anchor=W, fg='white', bg='#373435')
         vidfer = Entry(tb5)
 
@@ -618,9 +672,9 @@ class Jan_Cf(tk.Tk):
         vhrret = ttk.Combobox(tb5, width=27)
         # Adição de itens no Combobox
         vhrret['values'] = (
-        "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00",
-        "12:00",
-        "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00")
+            "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00",
+            "12:00",
+            "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00")
         vhrret.set('Selecione')
         vhrret.current()
 
@@ -633,9 +687,9 @@ class Jan_Cf(tk.Tk):
         vhrdev = ttk.Combobox(tb5, width=27)
         # Adição de itens no Combobox
         vhrdev['values'] = (
-        "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00",
-        "12:00",
-        "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00")
+            "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00",
+            "12:00",
+            "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00")
         vhrdev.set('Selecione')
         vhrdev.current()
 
@@ -657,6 +711,8 @@ class Jan_Cf(tk.Tk):
         btn_adicionar_tb2 = Button(tb2, text='Cadastrar', command=add_tvbd2)
 
         btn_adicionar_tb5 = Button(tb5, text='Reservar', command=reservar)
+
+        btn_imp_tb5 = Button(tb5, text='Imprimir', command=imprimir)
 
         # -----------------------------------------------------------------------------------
 
@@ -859,6 +915,7 @@ class Jan_Cf(tk.Tk):
         btn_devol_tb5.place(x=100, y=300, width=80, height=20)
         btn_adicionar_tb5.place(x=10, y=300, width=80, height=20)
         btn_down_tb5.place(x=190, y=300, width=80, height=20)
+        btn_imp_tb5.place(x=280, y=300, width=80, height=20)
 
         lbidfer_tb5.place(x=10, y=330, width=100, height=20)
         vidfer.place(x=130, y=330, width=80, height=20)
