@@ -23,7 +23,6 @@ tabela_ferramentas = pd.read_csv(r'lista_ferramentas.csv', sep=';', index_col=0,
 tabela_funcionarios = pd.read_csv(r'lista_funcionarios.csv', sep=',', index_col=0, encoding='UTF-8')
 tabela_reservas = pd.read_csv(r'lista_reservas.csv', sep=';', index_col=0, encoding='UTF-8')
 
-
 #-------------JANELA DE LOGIN------------------------------------------
 class App(tk.Tk):
     def __init__(self):
@@ -60,7 +59,7 @@ class App(tk.Tk):
         else:
             messagebox.showinfo(message='Digite sua senha.')
 
-# FUNÇÃO PARA VERIFICAR USUARIO E SENHA
+# FUNÇÃO PARA USUARIO E SENHA
     def abrir_jan_cf(self):
         if self.usuario.get() == 'devteam4' and self.senha.get() == 'devteam4':
             self.destroy()
@@ -356,22 +355,22 @@ class Jan_Cf(tk.Tk):
                 return 'MATERIAL NÃO PODE ESTAR VAZIO!'
             else:
                 try:
-                    if len(descricao) > 60:  # elif len(name) <= 5 or len(name) >40: return 'O nome deve ser entre 05 a 40 caracteres'
-                        return 'LIMITE DE 60 CARACTERES!'
+                    if len(descricao) > 60: 
+                        return 'DESCRIÇÃO: LIMITE DE 60 CARACTERES!'
                     if len(fabricante) > 30:
-                        return 'LIMITE DE ATÉ 30 CARACTERES!'
+                        return 'FABRICANTE: LIMITE DE ATÉ 30 CARACTERES!'
                     if len(voltagem) > 15:
-                        return 'LIMITE DE 15 CARACTERES!'
+                        return 'VOLTAGEM: LIMITE DE 15 CARACTERES!'
                     if len(pnumber) > 25:
-                        return 'LIMITE DE 25 CARACTERES!'
+                        return 'PART NUMBER: LIMITE DE 25 CARACTERES!'
                     if len(tamanho) > 20:
-                        return 'LIMITE DE 20 CARACTERES!'
+                        return 'TAMANHO: LIMITE DE 20 CARACTERES!'
                     if len(unidade) > 15:
-                        return 'LIMITE DE 15 CARACTERES!'
+                        return 'UNIDADE: LIMITE DE 15 CARACTERES!'
                     if len(tipofer) > 15:
-                        return 'LIMITE DE 15 CARACTERES!'
+                        return 'TIPO: LIMITE DE 15 CARACTERES!'
                     if len(matfer) > 15:
-                        return 'LIMITE DE 15 CARACTERES!'
+                        return 'MATERIAL: LIMITE DE 15 CARACTERES!'
                     else:
                         return 'Sucess!'
                 except Exception as ep:
@@ -380,16 +379,17 @@ class Jan_Cf(tk.Tk):
         def add_tvbd2():
             if val_fer() != 'Sucess!':
                 # or vturno.get() =='' or vequipe.get() =='' or vcpf.get() =='' or vfone.get() =='':
-                messagebox.showinfo('erro', message=val_fer())
+                messagebox.showinfo('Atenção!', message=val_fer())
             # if vdesc.get() =='' or vfab.get() =='' or vvolt.get() =='' \
             #         or vtam.get() =='' or vuni.get() =='' or vtipo.get() =='' or vmat.get() ==''\
             #         or vpn.get() =='':
             #     messagebox.showinfo('erro', message='Preencha todos os campos')
             else:
+                id_fer = gerar_id()
                 treeFer.insert('', tk.END,
-                               values=(gerar_id(), v.get(), v2.get(), vvolt.get(), vtam.get(), vuni.get(),
+                               values=(id_fer, v.get(), v2.get(), vvolt.get(), vtam.get(), vuni.get(),
                                        vtipo.get(), vmat.get(), vpn.get(),vtmr.get()))
-                lista_add = [gerar_id(), v.get(), v2.get(), vvolt.get(), vtam.get(), vuni.get(),
+                lista_add = [id_fer, v.get(), v2.get(), vvolt.get(), vtam.get(), vuni.get(),
                              vtipo.get(), vmat.get(), vpn.get(), vtmr.get()]
                 # print(Bd.tabela_ferramentas)
                 tabela_ferramentas.loc[len(tabela_ferramentas)] = lista_add
@@ -416,6 +416,7 @@ class Jan_Cf(tk.Tk):
                 return id
 
         def download2():
+            tabela_ferramentas = pd.read_csv(r'lista_ferramentas.csv', sep=';', index_col=0)
             tabela_ferramentas.to_excel(r'C:\Users\Public\Downloads\tabela_ferramentas.xlsx')
             messagebox.showinfo(
                 message='Download realizado com sucesso. Documento salvo em ' + r'C:\Users\Public\Downloads')
@@ -431,7 +432,7 @@ class Jan_Cf(tk.Tk):
         def caps2(event):
             v2.set(v2.get().upper())
             if len(v2.get()) > 30:
-                messagebox.showinfo(message='DESCRIÇÃO ULTRAPASSOU O LIMITE DE 30 CARACTERES!')
+                messagebox.showinfo(message='FABRICAÇÃO ULTRAPASSOU O LIMITE DE 30 CARACTERES!')
 
         v2 = StringVar()
         lbfab = Label(tb2, anchor=W, text="FABRICANTE", fg='white', bg='#373435')
@@ -572,23 +573,24 @@ class Jan_Cf(tk.Tk):
                 return messagebox.showinfo('Atenção!',
                                            message='REVISE O ID NA TABELA FERRAMENTAS!')
             if len(vdescres.get()) == 0 or len(vdescres.get()) <= 15:
-                return messagebox.showinfo('erro',
+                return messagebox.showinfo('Atenção!',
                                            message='DESCRIÇÃO DEVE TER NO MINIMO 15 CARACTERES!')
             if len(vdtret.get()) == 0:
-                return messagebox.showinfo('erro', message='Selecione a data de retirada')
+                return messagebox.showinfo('Atenção!', message='Selecione a data de retirada')
             if len(vhrret.get()) == 0 or vhrret.get() == 'Selecione':
-                return messagebox.showinfo('erro', message='Selecione a hora de retirada')
+                return messagebox.showinfo('Atenção!', message='Selecione a hora de retirada')
             if len(vdtdev.get()) == 0:
-                return messagebox.showinfo('erro', message='Selecione a data de devolução')
+                return messagebox.showinfo('Atenção!', message='Selecione a data de devolução')
             if len(vhrdev.get()) == 0 or vhrdev.get() == 'Selecione':
-                return messagebox.showinfo('erro', message='Selecione a hora da devolução')
+                return messagebox.showinfo('Atenção!', message='Selecione a hora da devolução')
             if len(vnmtec.get()) == 0 or len(vnmtec.get()) <= 5:
-                return messagebox.showinfo('erro', message='Por favor insira o nome completo (MAIOR QUE 10 CARACTERES)')
+                return messagebox.showinfo('Atenção!', message='Por favor insira o nome completo (MAIOR QUE 10 CARACTERES)')
             else:
+                id_res = gerar_idres()
                 treeRes.insert('', tk.END,
-                               values=(gerar_idres(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(),
+                               values=(id_res, vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(),
                                        vdtdev.get(), vhrdev.get(), vnmtec.get(), 'PENDENTE', data_hora()))
-                lista_add = [gerar_idres(), vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(), vdtdev.get(),
+                lista_add = [id_res, vidfer.get(), vdescres.get(), vdtret.get(), vhrret.get(), vdtdev.get(),
                              vhrdev.get(), vnmtec.get(), 'PENDENTE', data_hora()]
                 tabela_reservas.loc[len(tabela_reservas)] = lista_add
                 tabela_reservas.to_csv(r'lista_reservas.csv', sep=';')
@@ -616,7 +618,7 @@ class Jan_Cf(tk.Tk):
 
         def devolucao():
             if not treeRes.selection():
-                messagebox.showinfo(title='erro', message='Selecione o elemento a ser atualizado')
+                messagebox.showinfo(title='Atenção!', message='Selecione o elemento a ser atualizado')
             else:
                 index = treeRes.index(treeRes.selection()[0])
 
@@ -677,6 +679,7 @@ class Jan_Cf(tk.Tk):
                 vidfer.focus()
 
         def download3():
+            tabela_reservas = pd.read_csv('lista_reservas.csv', sep=';', index_col=0)
             tabela_reservas.to_excel(r'C:\Users\Public\Downloads\lista_reservas.xlsx')
             messagebox.showinfo(
                 message='Download realizado com sucesso. Documento salvo em ' + r'C:\Users\Public\Downloads')
@@ -700,7 +703,7 @@ class Jan_Cf(tk.Tk):
             sheet_obj.column_dimensions['A'].width = 2
             sheet_obj.column_dimensions['B'].width = 12
             sheet_obj.column_dimensions['C'].width = 15
-            sheet_obj.column_dimensions['D'].width = 17
+            sheet_obj.column_dimensions['D'].width = 19
             sheet_obj.column_dimensions['E'].width = 17
             sheet_obj.column_dimensions['F'].width = 17
             sheet_obj.column_dimensions['G'].width = 17
@@ -726,7 +729,7 @@ class Jan_Cf(tk.Tk):
             
                     # Sleeping the program for 5 seconds so as to account the
                     #steady processing of the print operation.
-                    time.sleep(30)
+                    time.sleep(10)
                 except:
                     #Catching if any error occurs and alerting the user
                     print(f'ALERTA: {file} NÃO PODE SER IMPRESSA! POR FAVOR\
