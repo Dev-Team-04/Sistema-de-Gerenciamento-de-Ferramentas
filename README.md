@@ -90,9 +90,9 @@
 
 *  Para acessar o sistema devem ser utilizados os seguintes usuário e senha: Usuario = 'devteam4' e senha = 'devteam4'.
 *  O único usuário que vai operar o sistema é o responsável pela Central de Ferramentas. Ele poderá adicionar/excluir tecnicos e ferramentas, adicionar reservas e marcar as reservas como devolvidas, fazer o download dos arquivos da base de ferramentas, tecnicos e reservas, imprimir a lista/histórico de reservas.
-* 1- Executa a função "xxxxxxxx" , abre a tela principal do aplicativo e fecha a janela de login; 2- Executa a função"xxxxxx"...
+* O botão 1 (Login) faz a verificação de usuário e senha. Caso estejam corretos, abre a tela principal do aplicativo e fecha a janela de login. Caso estejam incorretos, há uma mensagem informando o erro. O botão 2 (Mostrar Senha) mostra a senha digitada.
 
-
+<!--
 > Explicações
 
 **Central de Ferramentaria**
@@ -105,3 +105,4 @@
     * Fazer reservas, devolução, exclusão dos registros e limpar os filtros da tela
 **Baixar CSV**
     * Poderá ser feito o download dos arquivos csv da base de ferramentas, tecnicos e reservas.
+-->
