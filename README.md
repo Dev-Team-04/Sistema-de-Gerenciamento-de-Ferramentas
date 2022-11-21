@@ -37,24 +37,24 @@
 
 <h2> Contexto </h2>
 
-> Diferentes equipamentos com diversas necessidades de manutenção
-> Equipes de manutenção trabalham em turnos
-> Necessidades de diversas ferramentas específicas e com valores elevados
-> Ferramentas precisam estar em bom estado de conservação e aferidas conforme as normas e padrões do fabricantes
-> Ferramentas com diversas características técnicas que indicam para qual uso específico elas se aplicam
-> A correta reserva da ferramenta antes da execução do trabalho é fator crítico de sucesso
+> Diferentes equipamentos com diversas necessidades de manutenção.
+> Equipes de manutenção trabalham em turnos.
+> Necessidades de diversas ferramentas específicas e com valores elevados.
+> Ferramentas precisam estar em bom estado de conservação e aferidas conforme as normas e padrões do fabricantes.
+> Ferramentas com diversas características técnicas que indicam para qual uso específico elas se aplicam.
+> A correta reserva da ferramenta antes da execução do trabalho é fator crítico de sucesso.
 
 <h2> Descrição do Processo </h2>
 
-> Local onde as ferramentas ficam armazenadas chama-se “Central de Ferramentaria”
-> As ferramentas precisam ser reservadas com, no mínimo, 24 horas de antecedência
-> Solicitação de reserva são enviadas por endereço eletrônico para o responsável pela Central
-> No momento da reserva deve-se informar: Data e Hora da Retirada e da Devolução
-> Reservas precisam ficar associadas ao técnico responsável pela sua retirada
+> Local onde as ferramentas ficam armazenadas chama-se “Central de Ferramentaria”.
+> As ferramentas precisam ser reservadas com, no mínimo, 24 horas de antecedência.
+> Solicitação de reserva são enviadas por endereço eletrônico para o responsável pela Central.
+> No momento da reserva deve-se informar: Data e Hora da Retirada e da Devolução.
+> Reservas precisam ficar associadas ao técnico responsável pela sua retirada.
 > Uma ferramenta só pode ser reservada se ela estiver disponível na data e hora da retirada, ou seja, não pode estar
-  reservada por outro técnico no momento da retirada
+  reservada por outro técnico no momento da retirada.
 > O responsável pela central controla as devoluções para garantir que as ferramentas estarão sempre disponíveis no
-  momento previsto para a próxima retirada
+  momento previsto para a próxima retirada.
 
 <h2> Requisitos Obrigatorios </h2>
 
