@@ -85,24 +85,32 @@
 <h3>Tela inicial: Login</h3>
 
 <a>
-      <img src="Clipboard.jpg" width="600" height="400">
+      <img src="login.jpg" width="600" height="400">
 </a>
 
 *  Para acessar o sistema devem ser utilizados os seguintes usuário e senha: Usuario = 'devteam4' e senha = 'devteam4'.
 *  O único usuário que vai operar o sistema é o responsável pela Central de Ferramentas. Ele poderá adicionar/excluir tecnicos e ferramentas, adicionar reservas e marcar as reservas como devolvidas, fazer o download dos arquivos da base de ferramentas, tecnicos e reservas, imprimir a lista/histórico de reservas.
 * O botão 1 (Login) faz a verificação de usuário e senha. Caso estejam corretos, abre a tela principal do aplicativo e fecha a janela de login. Caso estejam incorretos, há uma mensagem informando o erro. O botão 2 (Mostrar Senha) mostra a senha digitada.
 
-<!--
-> Explicações
+<h3>Tela Principal: Aba Gerenciar Tecnicos</h3>
+<a>
+      <img src="tecnicos.jpg" width="800" height="400">
+</a>
 
-**Central de Ferramentaria**
-    * Tela inicial/Menu irá conter os botões de naveção para as funcionalidades da aplicação.
-**Cadastros**
-    * Poderá efetuar cadastros de tecnico e ferramenta e inserir imagem para ambos.
-**Consultas**
-    * Poderá consultar as reservas, ferramentas e tecnicos cadastrados no sitema.
-**Reserva/Devolução**
-    * Fazer reservas, devolução, exclusão dos registros e limpar os filtros da tela
-**Baixar CSV**
-    * Poderá ser feito o download dos arquivos csv da base de ferramentas, tecnicos e reservas.
--->
+* A janela principal é formada por um notebook que recebe 03 frames (1) como abas do notebook.
+* A aba destacada em vermelho, Gerenciar Tecnicos, é a que permite gerenciar o cadastro dos tecnicos. O responsável pela central de ferramentas poderá Cadastrar(2), Deletar(3), fazer o download da lista de tecnicos cadastrados em excel(4) e poderá consultar a lista de tecnicos por meio da navegação na Treeview da aba.
+
+<h3>Tela Principal: Aba Gerenciar Ferramentas</h3>
+<a>
+      <img src="ferramentas.jpg" width="800" height="400">
+</a>
+
+* A aba destacada em vermelho, Gerenciar Ferramentas, é a que permite gerenciar o cadastro das ferramentas da central. O responsável pela central de ferramentas poderá Cadastrar(Botão cadastrar), Deletar(Botão deletar), fazer o download da lista de ferramentas cadastradas em excel(Botão download) e poderá consultar as ferramentas por meio da navegação na Treeview da aba.
+
+<h3>Tela Principal: Aba Gerenciar Reservas </h3>
+<a>
+      <img src="reservas.jpg" width="800" height="400">
+</a>
+
+* A aba destacada em preto, Gerenciar Reservas, é a que permite gerenciar as reservas. O responsável pela central de ferramentas poderá Reservar uma ferramenta(2), Confirmar a devolução da ferramenta(3), Fazer o download do histórico de todas as reservas em excel(4), imprimir o histórico de todas as reservas ordenadas por data(5) e poderá consultar as reservas por meio da navegação na Treeview da aba.
+
