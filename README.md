@@ -72,3 +72,23 @@
 
  <h1 align="center"> APLICAÇÃO </h1>
  <hr>
+ 
+* Link: [Vídeo da Aplicação](link do youtube)
+
+* Bibliotecas Necessárias:
+
+      
+* Instalar as bibliotecas e executar o arquivo main.py (link do main.py aqui).
+
+* Fluxo das Telas e Descrição das Funcionalidades:
+
+**Central de Ferramentaria**
+    * Tela inicial/Menu irá conter os botões de naveção para as funcionalidades da aplicação.
+**Cadastros**
+    * Poderá efetuar cadastros de tecnico e ferramenta e inserir imagem para ambos.
+**Consultas**
+    * Poderá consultar as reservas, ferramentas e tecnicos cadastrados no sitema.
+**Reserva/Devolução**
+    * Fazer reservas, devolução, exclusão dos registros e limpar os filtros da tela
+**Baixar CSV**
+    * Poderá ser feito o download dos arquivos csv da base de ferramentas, tecnicos e reservas.
