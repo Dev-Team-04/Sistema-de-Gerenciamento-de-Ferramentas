@@ -86,7 +86,7 @@ class Jan_Cf(tk.Tk):
 # -- FUNÇÕES/BOTÕES/LABELS/ENTRY/COMBOBOX/TREEVIEW DA ABA TECNICOS/FUNCIONARIOS (tb4)----------------------
 
         tb4 = Frame(my_note, bg='#373435', width=250, height=150, borderwidth=0)
-        my_note.add(tb4, text='Gerenciar Tecnicos')
+        my_note.add(tb4, text='Gerenciar Técnicos')
 
         def del_tvbd():
             if not treeTec.selection():
@@ -710,7 +710,7 @@ class Jan_Cf(tk.Tk):
 
             sheet_obj.page_setup.orientation = sheet_obj.ORIENTATION_LANDSCAPE
 
-            wb_obj.save(r"C:\Users\Public\Downloads\tabela_reservas.xlsx",)    
+            wb_obj.save(r"C:\Users\Public\Downloads\tabela_reservas.xlsx")
             
 
             # Insert the directory path in here
@@ -729,7 +729,7 @@ class Jan_Cf(tk.Tk):
             
                     # Sleeping the program for 5 seconds so as to account the
                     #steady processing of the print operation.
-                    time.sleep(10)
+                    time.sleep(3)
                 except:
                     #Catching if any error occurs and alerting the user
                     print(f'ALERTA: {file} NÃO PODE SER IMPRESSA! POR FAVOR\
