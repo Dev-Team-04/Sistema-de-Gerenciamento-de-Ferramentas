@@ -73,7 +73,7 @@
  <h1 align="center"> APLICAÇÃO </h1>
  <hr>
  
-* Link: [Vídeo da Aplicação](link do youtube)
+* Link: [Vídeo da Aplicação](https://www.youtube.com/watch?v=cJ728EHod8o&ab_channel=MamboDark)
 
 * Bibliotecas Necessárias:
 
