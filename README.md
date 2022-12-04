@@ -73,7 +73,7 @@
  <h1 align="center"> APLICAÇÃO </h1>
  <hr>
  
- <h2> VIDEOS DA APLICAÇÃO </h2>
+ <h3> VIDEOS DA APLICAÇÃO </h3>
  
 * Link: [Vídeo da Aplicação curto](https://youtu.be/xs_NYjLoO54)
  
