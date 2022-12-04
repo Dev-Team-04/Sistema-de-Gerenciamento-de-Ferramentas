@@ -73,7 +73,9 @@
  <h1 align="center"> APLICAÇÃO </h1>
  <hr>
  
-* Link: [Vídeo da Aplicação](https://www.youtube.com/watch?v=cJ728EHod8o&ab_channel=MamboDark)
+* Link: [Vídeo da Aplicação Take 2 com 5 minutos](https://youtu.be/xs_NYjLoO54)
+ 
+* Link: [Vídeo da Aplicação Take 1 Video com 16 minutos](https://www.youtube.com/watch?v=cJ728EHod8o&ab_channel=MamboDark)
 
 * Bibliotecas Necessárias:
 
