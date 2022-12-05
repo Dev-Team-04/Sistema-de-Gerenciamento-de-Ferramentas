@@ -80,9 +80,17 @@
 * Link: [Vídeo da Aplicação longo com 16 minutos](https://www.youtube.com/watch?v=cJ728EHod8o&ab_channel=MamboDark)
 
 * Bibliotecas Necessárias:
+   - Pandas
+   - Random
+   - tkcalendar
+   - datetime
+   - openpyxl
+   - pytz
+   - time
+  
+* Fazer o download de todos os arquivos ou clonar o [repositório](https://github.com/Dev-Team-04/Sistema-de-Gerenciamento-de-Ferramentas)
 
-      
-* Instalar as bibliotecas e executar o arquivo main.py (link do main.py aqui).
+* Instalar e importar as bibliotecas acima e executar o arquivo [main.py](https://github.com/Dev-Team-04/Sistema-de-Gerenciamento-de-Ferramentas/blob/main/main.py)
 
 * Fluxo das Telas e Descrição das Funcionalidades:
 
